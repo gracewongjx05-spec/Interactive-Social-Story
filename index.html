@@ -2,67 +2,326 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="theme-color" content="#0b1020" />
-    <title>GitHub → Vercel Connection Test</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#062679" />
+    <meta name="description" content="A picture-led, step-by-step wayfinding story to the exhibition venue." />
+    <title>Shortest route · Wayfinding story</title>
     <style>
-      :root {
-        color-scheme: dark;
-        font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-        color: #edf2ff;
-        background: #0b1020;
+      :root { color-scheme: light; font-family: "DM Sans", "Trebuchet MS", ui-sans-serif, system-ui, sans-serif; --blue:#00c9ff; --navy:#062679; --yellow:#ffd500; }
+      * { box-sizing:border-box; }
+      html,body { margin:0; min-height:100%; background:#101a2b; }
+      body { min-height:100dvh; }
+      button { font:inherit; }
+      .book { position:relative; width:min(calc(100vw - 24px),calc((100dvh - 24px) * 1.77778)); aspect-ratio:16 / 9; height:auto; max-height:calc(100dvh - 24px); overflow:hidden; border:7px solid #101a2b; border-radius:30px; background:#fff; isolation:isolate; box-shadow:0 20px 80px rgb(0 0 0 / 30%); }
+      .loading { position:absolute; z-index:20; inset:0; display:flex; flex-direction:column; justify-content:center; align-items:center; gap:clamp(10px,2.5vh,18px); padding:24px; background:#fff; transition:opacity .35s ease,visibility .35s ease; }
+      .loading.done { opacity:0; visibility:hidden; pointer-events:none; }
+      .walk-stage { position:relative; width:min(68%,520px); height:52%; flex:none; display:flex; align-items:flex-end; justify-content:center; }
+      .momo-walker { width:clamp(130px,34vh,190px); height:auto; aspect-ratio:1.25; transform-origin:50% 86%; animation:momo-walk-in-place .7s ease-in-out infinite alternate; will-change:transform; }
+      .loading-momo { display:block; width:100%; height:100%; object-fit:contain; }
+      @keyframes momo-walk-in-place {
+        0% { transform:translateY(0) rotate(-6deg); }
+        50% { transform:translateY(-5px) rotate(0deg); }
+        100% { transform:translateY(0) rotate(6deg); }
       }
-      * { box-sizing: border-box; }
-      body {
-        min-height: 100vh;
-        margin: 0;
-        display: grid;
-        place-items: center;
-        padding: 24px;
-        background: radial-gradient(ellipse at top, #172747 0%, #0b1020 62%);
+      .loading-track { width:min(55%,420px); height:clamp(20px,5vh,32px); padding:2px; border:3px solid #193451; border-radius:99px; background:#fff; overflow:hidden; }
+      .loading-fill { width:0%; height:100%; border-radius:99px; background:#00a9e8; transition:width .12s linear; }
+      .loading-label { margin:0; color:#062679; font-size:clamp(22px,5vh,36px); font-weight:700; letter-spacing:.01em; }
+      .slide { position:absolute; inset:0; display:none; overflow:hidden; background:#fff; }
+      .slide.active { display:block; animation:show .2s ease-out both; }
+      @keyframes show { from {opacity:.65} to {opacity:1} }
+      .route-empty { background:#fff; }
+      .intro { display:grid; grid-template-columns: 1fr 1fr; height:100%; background:#fff; }
+      .intro-art { display:grid; place-items:center; position:relative; overflow:hidden; background:#e9faff; }
+      .intro-art::before { content:""; position:absolute; width:52vw; height:52vw; border-radius:50%; background:#c8f4ff; right:-26vw; top:-35vw; }
+      .intro-art img { z-index:1; width:min(72%,42vh); max-height:86%; object-fit:contain; }
+      .intro-copy { display:flex; flex-direction:column; justify-content:center; padding:clamp(20px,5vw,58px); }
+      .eyebrow { margin:0 0 12px; color:#344054; font-size:clamp(14px,2.2vh,19px); font-weight:800; letter-spacing:.04em; text-transform:uppercase; }
+      .intro h1 { margin:0; color:#111; font-size:clamp(25px,5.2vh,46px); line-height:1.15; }
+      .intro p { margin:12px 0 0; color:#475467; font-size:clamp(16px,2.7vh,23px); line-height:1.35; }
+      .start-route-button { width:min(100%,280px); min-height:56px; margin-top:clamp(18px,3.5vh,30px); align-self:flex-start; }
+      .picker-screen { position:absolute; z-index:3; inset:0; display:flex; flex-direction:column; align-items:center; padding:clamp(18px,5%,34px) 24px 18px; background:#fff; }
+      .picker-title { margin:0; text-align:center; color:#080808; font-size:clamp(20px,4.4vh,27px); line-height:1.2; font-weight:700; }
+      .route-options { width:100%; flex:1; min-height:0; display:flex; align-items:center; justify-content:center; gap:clamp(36px,13vw,112px); padding-top:8px; }
+      .route-card { width:min(31%,255px); height:min(76%,266px); min-height:0; border:4px solid var(--blue); border-radius:36px; padding:14px 12px 16px; display:flex; flex-direction:column; align-items:center; justify-content:space-between; color:#080808; box-shadow:none; }
+      .route-card img { display:block; width:76%; height:68%; object-fit:contain; }
+      .route-card strong { font-size:clamp(17px,3.8vh,24px); line-height:1.15; text-align:center; white-space:nowrap; }
+      .garden-card { background:#00e6b8; }
+      .shortest-card { background:var(--yellow); cursor:pointer; transition:transform .14s ease, box-shadow .14s ease; }
+      .shortest-card:hover { transform:translateY(-3px); box-shadow:0 7px 0 rgb(6 38 121 / 14%); }
+      .shortest-card:active { transform:translateY(2px); box-shadow:none; }
+      .shortest-card:focus-visible { outline:4px solid var(--navy); outline-offset:4px; }
+      .route-ui[hidden], .picker-screen[hidden] { display:none !important; }
+      .route-step-one { background:#fff; }
+      .route-step-one-photo { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; object-position:center 78%; }
+      .route-step-one-momo { position:absolute; z-index:2; left:57%; top:40%; width:19%; height:40%; }
+      .route-step-one-momo img { position:absolute; inset:0; width:100%; height:100%; object-fit:contain; }
+      .route-step-one-arm { transform-origin:34% 65.4%; animation:momo-arm-point 3.4s ease-in-out infinite; }
+      @keyframes momo-arm-point {
+        0%, 14%, 100% { transform:rotate(0deg); }
+        42%, 59% { transform:rotate(48deg); }
+        84% { transform:rotate(0deg); }
       }
-      main {
-        width: min(100%, 620px);
-        padding: clamp(28px, 7vw, 56px);
-        border: 1px solid #283553;
-        border-radius: 24px;
-        background: rgb(17 25 45 / 92%);
-        box-shadow: 0 24px 70px rgb(0 0 0 / 35%);
+      .route-instruction { position:absolute; z-index:3; left:28%; top:57.5%; width:30.3%; aspect-ratio:256 / 71; margin:0; padding:4px 2.5%; display:grid; grid-template-rows:repeat(2,auto); align-content:center; justify-items:center; border:5px solid var(--blue); border-radius:25px; background:var(--yellow); color:#030303; text-align:center; font-size:clamp(16px,2.6vw,22px); line-height:1.25; }
+      .route-instruction span { display:block; white-space:nowrap; }
+      .route-instruction strong { font-weight:800; }
+      .route-step-two-photo { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; object-position:center 50%; }
+      .route-step-two-momo { position:absolute; z-index:2; left:14%; top:57%; width:21%; height:39%; }
+      .route-step-two-momo img { position:absolute; inset:0; width:100%; height:100%; object-fit:contain; }
+      .route-step-two-arm { transform-origin:69% 54.3%; animation:momo-escalator-lift 3.6s ease-in-out infinite; }
+      @keyframes momo-escalator-lift {
+        0%, 16%, 100% { transform:rotate(40deg); }
+        42%, 68% { transform:rotate(0deg); }
+        86% { transform:rotate(40deg); }
       }
-      .badge {
-        display: inline-flex;
-        align-items: center;
-        gap: 9px;
-        padding: 8px 12px;
-        border: 1px solid #245442;
-        border-radius: 999px;
-        background: #10271f;
-        color: #83edb0;
-        font-size: 13px;
-        font-weight: 700;
-        letter-spacing: .02em;
+      .route-instruction-two { position:absolute; z-index:3; left:9%; top:29%; width:30.5%; aspect-ratio:256 / 71; margin:0; padding:4px 2.5%; display:grid; place-items:center; border:5px solid var(--blue); border-radius:25px; background:var(--yellow); color:#030303; text-align:center; font-size:clamp(16px,2.6vw,22px); line-height:1.25; white-space:nowrap; }
+      .route-instruction-two span { white-space:nowrap; }
+      .route-instruction-two strong { font-weight:800; }
+      .route-step-three-photo { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; object-position:center 50%; }
+      .route-step-three-momo { position:absolute; z-index:2; left:69%; top:57%; width:20%; height:38%; object-fit:contain; transform:scaleX(-1); }
+      .route-step-three-attention { position:absolute; z-index:3; left:67.2%; top:72%; width:5.2%; height:10%; overflow:visible; animation:momo-attention-blink 1.5s ease-in-out infinite; transform-origin:center; }
+      .route-step-three-attention path { fill:none; stroke:var(--blue); stroke-width:8; stroke-linecap:round; stroke-linejoin:round; }
+      @keyframes momo-attention-blink {
+        0%, 38%, 68%, 100% { opacity:1; transform:scale(1); }
+        50%, 58% { opacity:0; transform:scale(.88); }
       }
-      .dot { width: 8px; height: 8px; border-radius: 50%; background: #55e28c; box-shadow: 0 0 0 4px rgb(85 226 140 / 14%); }
-      h1 { margin: 24px 0 12px; font-size: clamp(32px, 7vw, 48px); line-height: 1.08; letter-spacing: -.045em; }
-      p { margin: 0; color: #aebbd2; font-size: 17px; line-height: 1.65; }
-      .flow { display: flex; align-items: center; gap: 12px; margin: 30px 0; padding: 16px; border: 1px solid #283553; border-radius: 14px; background: #0d1427; }
-      .step { flex: 1; color: #e5ecff; text-align: center; font-size: 14px; font-weight: 700; }
-      .arrow { color: #7283a4; font-size: 20px; }
-      .note { padding-top: 20px; border-top: 1px solid #283553; font-size: 14px; }
-      @media (max-width: 420px) { .flow { gap: 7px; padding: 13px 9px; } .step { font-size: 12px; } }
+      .route-instruction-three { position:absolute; z-index:3; left:61%; top:34%; width:31%; aspect-ratio:256 / 71; margin:0; padding:4px 2.5%; display:grid; place-items:center; border:5px solid var(--blue); border-radius:25px; background:var(--yellow); color:#030303; text-align:center; font-size:clamp(16px,2.6vw,22px); line-height:1.25; }
+      .route-instruction-three span { white-space:nowrap; }
+      .route-instruction-three strong { font-weight:800; }
+      .route-step-four-photo { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; object-position:center 50%; }
+      .route-step-four-momo { position:absolute; z-index:2; left:58%; top:53%; width:25%; height:35%; object-fit:contain; transform-origin:70% 56%; animation:momo-tap-card 3.4s ease-in-out infinite; }
+      @keyframes momo-tap-card {
+        0%, 18%, 100% { transform:translate(0,0) scaleX(-1) rotate(0deg); }
+        43%, 62% { transform:translate(-36%,20%) scaleX(-1) rotate(8deg); }
+        86% { transform:translate(0,0) scaleX(-1) rotate(0deg); }
+      }
+      .route-instruction-four { position:absolute; z-index:3; left:62%; top:9%; width:31%; aspect-ratio:256 / 71; margin:0; padding:4px 2.5%; display:grid; place-items:center; border:5px solid var(--blue); border-radius:25px; background:var(--yellow); color:#030303; text-align:center; font-size:clamp(16px,2.6vw,22px); line-height:1.25; }
+      .route-instruction-four span { white-space:nowrap; }
+      .route-instruction-four strong { font-weight:800; }
+      .route-step-four-card-cover { position:absolute; z-index:3; left:51.7%; top:74.5%; width:10%; height:7%; background:#de725d; transform:rotate(-20deg); pointer-events:none; }
+      .route-step-five-photo { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; object-position:center 50%; }
+      .route-step-five-momo { position:absolute; z-index:2; left:68%; top:30.5%; width:35.7%; height:50%; }
+      .route-step-five-momo img { position:absolute; inset:0; width:100%; height:100%; object-fit:contain; }
+      .route-step-five-wave-arm { transform-origin:30.4% 43.2%; animation:momo-dao-dao-wave 2.2s ease-in-out infinite; }
+      @keyframes momo-dao-dao-wave {
+        0%, 24%, 100% { transform:rotate(0deg); }
+        50%, 74% { transform:rotate(-7deg); }
+      }
+      .route-instruction-five { position:absolute; z-index:3; left:43%; top:14%; width:30.5%; aspect-ratio:256 / 71; margin:0; padding:4px 2.5%; display:grid; grid-template-rows:repeat(2,auto); align-content:center; justify-items:center; border:5px solid var(--blue); border-radius:25px; background:var(--yellow); color:#030303; text-align:center; font-size:clamp(16px,2.6vw,22px); line-height:1.25; }
+      .route-instruction-five span { display:block; white-space:nowrap; }
+      .route-instruction-five strong { font-weight:800; }
+      .route-step-six { background:#17222c; }
+      .route-step-six-photo { position:absolute; z-index:1; inset:0; width:100%; height:100%; object-fit:cover; object-position:center 50%; }
+      .route-step-six-momo { position:absolute; z-index:2; left:50.5%; top:45.5%; width:25%; height:35%; object-fit:contain; }
+      .route-instruction-six { position:absolute; z-index:3; left:49.5%; top:18%; width:33%; aspect-ratio:256 / 71; margin:0; padding:4px 1.5%; display:flex; justify-content:center; align-items:center; border:5px solid var(--blue); border-radius:25px; background:var(--yellow); color:#030303; text-align:center; font-size:clamp(16px,2.4vw,20px); line-height:1.25; white-space:nowrap; }
+      .route-instruction-six strong { font-weight:800; }
+      .route-step-seven-photo { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; object-position:center 50%; }
+      .route-step-seven-momo { position:absolute; z-index:2; left:51.2%; top:40.3%; width:10%; height:21.5%; object-fit:contain; }
+      .route-instruction-seven { position:absolute; z-index:3; left:55.2%; top:9.7%; width:33%; aspect-ratio:278 / 71; margin:0; padding:4px 1.5%; display:flex; justify-content:center; align-items:center; border:5px solid var(--blue); border-radius:25px; background:var(--yellow); color:#030303; text-align:center; font-size:clamp(16px,2.6vw,22px); line-height:1.25; white-space:nowrap; }
+      .route-instruction-seven strong { font-weight:800; }
+      .controls { position:absolute; z-index:5; inset:auto 16px max(18px,env(safe-area-inset-bottom)); display:flex; justify-content:space-between; align-items:center; gap:12px; pointer-events:none; }
+      .control { pointer-events:auto; border:3px solid var(--blue); border-radius:16px; min-width:58px; min-height:52px; padding:10px 17px; display:inline-flex; justify-content:center; align-items:center; gap:9px; background:var(--yellow); color:#101828; box-shadow:0 4px 0 #d2b000; font-size:clamp(16px,2.5vh,21px); font-weight:800; cursor:pointer; touch-action:manipulation; }
+      .control { min-width:104px; min-height:56px; }
+      .control:active { transform:translateY(3px); box-shadow:0 1px 0 #d2b000; }
+      .control:focus-visible { outline:4px solid #fff; outline-offset:3px; }
+      .control[disabled] { visibility:hidden; }
+      #next[hidden] { display:none !important; }
+      .control svg { width:22px; height:22px; }
+      .counter { position:absolute; pointer-events:none; left:50%; bottom:12px; transform:translateX(-50%); padding:8px 12px; border-radius:99px; color:#fff; background:rgb(6 38 121 / 90%); font-size:14px; font-weight:800; text-shadow:0 1px 2px #000; white-space:nowrap; }
+      .home-control { position:absolute; z-index:6; top:max(17px,env(safe-area-inset-top)); right:max(18px,env(safe-area-inset-right)); width:54px; height:54px; display:grid; place-items:center; border:3px solid var(--blue); border-radius:14px; background:var(--yellow); box-shadow:0 4px 0 #d2b000; color:#101828; cursor:pointer; }
+      .home-control svg { width:27px; height:27px; }
+      .home-control:focus-visible { outline:4px solid #fff; outline-offset:3px; }
+      .progress { position:absolute; z-index:4; top:max(10px,env(safe-area-inset-top)); left:16px; right:82px; height:7px; display:flex; gap:4px; pointer-events:none; }
+      .progress i { flex:1; border-radius:99px; background:rgb(255 255 255 / 65%); box-shadow:0 1px 3px rgb(0 0 0 / 20%); }
+      .progress i.done { background:var(--yellow); }
+      .landscape-help { display:none; }
+      .sr-only { position:absolute; width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0; }
+      @media (orientation:portrait) and (max-width:700px) {
+        .book { display:none; }
+        .landscape-help { min-height:100dvh; padding:28px; display:flex; flex-direction:column; justify-content:center; align-items:center; gap:18px; text-align:center; color:#fff; }
+        .phone { width:100px; height:150px; border:6px solid var(--blue); border-radius:23px; position:relative; animation:rotate 1.8s ease-in-out infinite alternate; }
+        .phone::after { content:""; position:absolute; width:7px; height:7px; border-radius:50%; background:#fff; bottom:7px; left:calc(50% - 3.5px); }
+        .landscape-help h1 { max-width:18ch; margin:0; font-size:28px; }
+        .landscape-help p { max-width:27ch; margin:0; color:#dbe8f9; font-size:18px; line-height:1.5; }
+        @keyframes rotate { to { transform:rotate(90deg); } }
+      }
+      @media (orientation:landscape) {
+        .book { margin:auto; }
+        body { display:grid; place-items:center; }
+      }
+      @media (prefers-reduced-motion:reduce) { *,*::before,*::after { animation-duration:.01ms!important; transition-duration:.01ms!important; } }
     </style>
   </head>
   <body>
-    <main>
-      <span class="badge"><span class="dot"></span> Deployment is live</span>
-      <h1>Hello from Vercel.</h1>
-      <p>This tiny page confirms that your website can be built and served. Push a change to GitHub and check whether Vercel creates a fresh deployment automatically.</p>
-      <div class="flow" aria-label="Deployment flow">
-        <span class="step">GitHub</span><span class="arrow" aria-hidden="true">→</span>
-        <span class="step">Vercel build</span><span class="arrow" aria-hidden="true">→</span>
-        <span class="step">This page</span>
+    <div class="landscape-help"><div class="phone" aria-hidden="true"></div><h1>Turn your phone sideways</h1><p>This picture story is easier to follow when your phone is held horizontally.</p></div>
+    <main class="book" aria-label="Shortest route picture story" aria-busy="true">
+      <div class="loading" id="loading" role="status" aria-label="Loading your wayfinding story">
+        <div class="walk-stage" aria-hidden="true"><img class="momo-walker loading-momo" src="assets/momo-loader.png" alt="" /></div>
+        <div class="loading-track" role="progressbar" aria-label="Loading" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><div class="loading-fill" id="loadingFill"></div></div>
+        <p class="loading-label">Loading…</p>
       </div>
-      <p class="note">Connection check: if you can read this page at your Vercel URL, the site is deployed. Push another edit to test automatic redeployment.</p>
+      <section class="picker-screen" id="pickerScreen" aria-labelledby="pickerTitle">
+        <h1 class="picker-title" id="pickerTitle">What would you like to explore today?</h1>
+        <div class="route-options">
+          <div class="route-card garden-card" aria-label="Garden Route, coming later"><img src="assets/garden-route.png" alt="Momo holding a flower" /><strong>Garden Route</strong></div>
+          <button class="route-card shortest-card" id="shortestRoute" type="button" aria-label="Open Shortest Route">
+            <img src="assets/momo-shortest-card.png" alt="Momo, your route guide" /><strong>Shortest Route</strong>
+          </button>
+        </div>
+      </section>
+      <div class="route-ui" id="routeUi" hidden>
+      <div class="progress" id="progress" aria-hidden="true"></div>
+      <section class="slide route-slide active" data-alt="Momo is your guide. This is the shortest route. Select Let’s Start to begin." aria-label="Welcome to the shortest route">
+        <div class="intro">
+          <div class="intro-art"><img src="assets/momo-short-2.png" alt="Momo, your friendly blue guide" /></div>
+          <div class="intro-copy"><p class="eyebrow">Shortest route</p><h1>Fewer steps, shortest trip.</h1><p>The fastest way to get there! Follow the pictures to the exhibition venue.</p><button class="control start-route-button" id="startRouteButton" type="button">Let’s Start! <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h13m-5-6 6 6-6 6" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button></div>
+        </div>
+      </section>
+      <section class="slide route-step-one" aria-label="Step 1: From the star, walk to the escalator">
+        <img class="route-step-one-photo" src="assets/escalator-floor.png" alt="Station concourse with an escalator and a red star on the floor." />
+        <div class="route-step-one-momo" role="img" aria-label="Momo points down to the star, then up toward the station signboard.">
+          <img class="route-step-one-base" src="assets/momo-route-step-1-base.png" alt="" />
+          <img class="route-step-one-arm" src="assets/momo-route-step-1-arm.png" alt="" />
+        </div>
+        <p class="route-instruction"><span>From the <strong>star</strong>, walk to</span><span>the <strong>escalator</strong></span></p>
+      </section>
+      <section class="slide route-step-two" aria-label="Step 2: Go up the escalator">
+        <img class="route-step-two-photo" src="assets/escalator-floor-step-2.png" alt="Station concourse with a prominent escalator." />
+        <div class="route-step-two-momo" role="img" aria-label="Momo lifts his hand from a lower position to point toward the escalator.">
+          <img class="route-step-two-base" src="assets/momo-route-step-2-base.png" alt="" />
+          <img class="route-step-two-arm" src="assets/momo-route-step-2-arm.png" alt="" />
+        </div>
+        <p class="route-instruction-two"><span><strong>Go up</strong> the <strong>escalator</strong></span></p>
+      </section>
+      <section class="slide route-step-three" aria-label="Step 3: Turn right to the gantry">
+        <img class="route-step-three-photo" src="assets/gantry-route.jpg" alt="A station concourse with a large overhead line sign and ticket gates." />
+        <img class="route-step-three-momo" src="assets/momo-route-step-2.png" alt="Momo points left toward the route." />
+        <svg class="route-step-three-attention" viewBox="0 0 100 100" aria-hidden="true">
+          <path d="M 86 18 Q 69 11 55 2 M 78 48 L 48 48 M 84 75 Q 67 82 53 94" />
+        </svg>
+        <p class="route-instruction-three"><span><strong>Turn right</strong> to the <strong>gantry</strong></span></p>
+      </section>
+      <section class="slide route-step-four" aria-label="Step 4: Tap card to exit">
+        <img class="route-step-four-photo" src="assets/route-card-page-5.jpg" alt="A child taps a transit card on the reader at the station gate." />
+        <div class="route-step-four-card-cover" aria-hidden="true"></div>
+        <img class="route-step-four-momo" src="assets/momo-route-step-2.png" alt="Momo moves down to tap the card, then returns to his starting position." />
+        <p class="route-instruction-four"><span><strong>Tap</strong> card to <strong>exit</strong></span></p>
+      </section>
+      <section class="slide route-step-five" aria-label="Step 5: Walk towards Dao Dao shop">
+        <img class="route-step-five-photo" src="assets/dao-dao-route.jpg" alt="A station concourse with ticketing service kiosks, an exit sign, and the Dao Dao shop." />
+        <div class="route-step-five-momo" role="img" aria-label="Momo waves his raised hand and points toward the Dao Dao shop.">
+          <img class="route-step-five-base" src="assets/momo-dao-dao-base.png" alt="" />
+          <img class="route-step-five-wave-arm" src="assets/momo-dao-dao-wave-arm.png" alt="" />
+        </div>
+        <p class="route-instruction-five"><span><strong>Walk</strong> towards</span><span><strong>Dao Dao shop</strong></span></p>
+      </section>
+      <section class="slide route-step-six" aria-label="Step 6: Go up the escalator">
+        <img class="route-step-six-photo" src="assets/route-page-7-photo.jpg" alt="Station concourse with Dao Dao shop on the left and escalators on the right." />
+        <img class="route-step-six-momo" src="assets/momo-route-step-2.png" alt="Momo points toward the escalator." />
+        <p class="route-instruction-six">Go&nbsp;<strong>up</strong>&nbsp;the&nbsp;<strong>escalator</strong></p>
+      </section>
+      <section class="slide route-step-seven" aria-label="Step 7: Walk towards exit door">
+        <img class="route-step-seven-photo" src="assets/route-page-8-photo.jpg" alt="The station exit doors between two escalators, with a person and child walking toward them." />
+        <img class="route-step-seven-momo" src="assets/momo-route-step-8.png" alt="Momo points toward the exit doors." />
+        <p class="route-instruction-seven"><strong>Walk</strong>&nbsp;towards&nbsp;exit&nbsp;door</p>
+      </section>
+      <section class="slide route-empty" aria-label="Empty route frame 8"></section>
+      <section class="slide route-empty" aria-label="Empty route frame 9"></section>
+      <section class="slide route-empty" aria-label="Empty route frame 10"></section>
+      <section class="slide route-empty" aria-label="Empty route frame 11"></section>
+      <section class="slide route-empty" aria-label="Empty route frame 12"></section>
+      <section class="slide route-empty" aria-label="Empty route frame 13"></section>
+      <section class="slide route-empty" aria-label="Empty route frame 14"></section>
+      <section class="slide route-empty" aria-label="Empty route frame 15"></section>
+      <section class="slide route-slide route-empty" aria-label="Empty route frame 16"></section>
+      <nav class="controls" aria-label="Story controls">
+        <button class="control" id="back" type="button" aria-label="Previous page" disabled>
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M19 12H6m5 6-6-6 6-6" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Back</span>
+        </button>
+        <button class="control" id="next" type="button" aria-label="Next page"><span>Let’s start</span>
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h13m-5-6 6 6-6 6" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+      </nav>
+      <div class="counter" id="counter" aria-live="polite">Page 1 of 17</div>
+      <button class="home-control" id="home" type="button" aria-label="Choose a route" title="Choose a route"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m3.5 10.2 8.5-7 8.5 7v10.3a1 1 0 0 1-1 1h-5.2v-7h-4.6v7H4.5a1 1 0 0 1-1-1V10.2Z" fill="currentColor" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg></button>
+      <p class="sr-only" id="announcement" aria-live="polite"></p>
+      </div>
     </main>
+    <script>
+      (() => {
+        const slides = [...document.querySelectorAll(".route-ui .slide")];
+        const back = document.getElementById("back");
+        const next = document.getElementById("next");
+        const startRouteButton = document.getElementById("startRouteButton");
+        const home = document.getElementById("home");
+        const pickerScreen = document.getElementById("pickerScreen");
+        const routeUi = document.getElementById("routeUi");
+        const shortestRoute = document.getElementById("shortestRoute");
+        const counter = document.getElementById("counter");
+        const announcement = document.getElementById("announcement");
+        const progress = document.getElementById("progress");
+        let current = 0;
+        slides.forEach((slide, index) => {
+          const segment = document.createElement("i");
+          if (index === 0) segment.classList.add("done");
+          progress.append(segment);
+        });
+        const segments = [...progress.children];
+        const loading = document.getElementById("loading");
+        const loadingFill = document.getElementById("loadingFill");
+        const loadingProgress = document.querySelector('[role="progressbar"]');
+        let loaded = 0;
+        const loader = setInterval(() => {
+          loaded = Math.min(100, loaded + 2);
+          loadingFill.style.width = `${loaded}%`;
+          loadingProgress.setAttribute("aria-valuenow", String(loaded));
+          if (loaded >= 100) {
+            clearInterval(loader);
+            loading.classList.add("done");
+            document.querySelector(".book").setAttribute("aria-busy", "false");
+          }
+        }, 100);
+        function show(index) {
+          current = Math.max(0, Math.min(slides.length - 1, index));
+          slides.forEach((slide, i) => {
+            const active = i === current;
+            slide.classList.toggle("active", active);
+            slide.setAttribute("aria-hidden", String(!active));
+          });
+          segments.forEach((segment, i) => segment.classList.toggle("done", i <= current));
+          counter.textContent = `Page ${current + 1} of ${slides.length}`;
+          back.disabled = current === 0;
+          next.hidden = current === 0;
+          next.querySelector("span").textContent = current === slides.length - 1 ? "Start again" : "Next";
+          next.setAttribute("aria-label", current === slides.length - 1 ? "Start this story again" : current === 0 ? "Start the route" : "Next page");
+          announcement.textContent = slides[current].getAttribute("aria-label");
+        }
+        shortestRoute.addEventListener("click", () => {
+          pickerScreen.hidden = true;
+          routeUi.hidden = false;
+          show(0);
+          next.focus();
+        });
+        back.addEventListener("click", () => show(current - 1));
+        next.addEventListener("click", () => show(current === slides.length - 1 ? 0 : current + 1));
+        startRouteButton.addEventListener("click", () => show(1));
+        home.addEventListener("click", () => {
+          routeUi.hidden = true;
+          pickerScreen.hidden = false;
+          shortestRoute.focus();
+        });
+        document.addEventListener("keydown", event => {
+          if (routeUi.hidden) return;
+          if (event.key === "ArrowLeft") show(current - 1);
+          if (event.key === "ArrowRight" || event.key === " ") { event.preventDefault(); show(current + 1); }
+        });
+        let startX = 0;
+        document.querySelector(".book").addEventListener("touchstart", event => { startX = event.changedTouches[0].clientX; }, { passive:true });
+        document.querySelector(".book").addEventListener("touchend", event => {
+          if (routeUi.hidden) return;
+          const dx = event.changedTouches[0].clientX - startX;
+          if (Math.abs(dx) > 65) show(current + (dx < 0 ? 1 : -1));
+        }, { passive:true });
+      })();
+    </script>
   </body>
 </html>
