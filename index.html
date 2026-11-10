@@ -99,7 +99,7 @@
         .route-card strong { font-size:clamp(16px,5cqh,22px); }
 
       }
-      .garden-card { background:#00e6b8; }
+      .garden-card { background:#00e6b8; text-decoration:none; }
       .shortest-card { background:var(--yellow); cursor:pointer; transition:transform .14s ease, box-shadow .14s ease; }
       .shortest-card:hover { transform:translateY(-3px); box-shadow:0 7px 0 rgb(6 38 121 / 14%); }
       .shortest-card:active { transform:translateY(2px); box-shadow:none; }
@@ -442,7 +442,7 @@
       <section class="picker-screen" id="pickerScreen" aria-labelledby="pickerTitle" hidden>
         <h1 class="picker-title" id="pickerTitle">What would you like to explore today?</h1>
         <div class="route-options">
-          <div class="route-card garden-card" aria-label="Garden Route, coming later"><img src="assets/garden-route.png" alt="Momo holding a flower" /><strong>Garden Route</strong></div>
+          <a class="route-card garden-card" href="https://momo-wayfinding.vercel.app/"><img src="assets/garden-route.png" alt="" /><strong>Garden Route</strong></a>
           <button class="route-card shortest-card" id="shortestRoute" type="button" aria-label="Open Shortest Route">
             <img src="assets/momo-shortest-card.png" alt="Momo, your route guide" /><strong>Shortest Route</strong>
           </button>
