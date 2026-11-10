@@ -12,7 +12,7 @@
       html,body { margin:0; min-height:100%; background:#101a2b; }
       body { min-height:100dvh; }
       button { font:inherit; }
-      .book { position:relative; width:min(calc(100vw - 24px),calc((100dvh - 24px) * 1.77778)); aspect-ratio:16 / 9; height:auto; max-height:calc(100dvh - 24px); overflow:hidden; border:7px solid #101a2b; border-radius:30px; background:#fff; isolation:isolate; box-shadow:0 20px 80px rgb(0 0 0 / 30%); }
+      .book { position:relative; width:min(calc(100vw - 24px),calc((100dvh - 24px) * 1.77778)); aspect-ratio:16 / 9; height:auto; max-height:calc(100dvh - 24px); overflow:hidden; border:7px solid #101a2b; border-radius:30px; background:#fff; isolation:isolate; container-type:size; box-shadow:0 20px 80px rgb(0 0 0 / 30%); }
       .loading { position:absolute; z-index:20; inset:0; display:flex; flex-direction:column; justify-content:center; align-items:center; gap:clamp(10px,2.5vh,18px); padding:24px; background:#fff; transition:opacity .35s ease,visibility .35s ease; }
       .loading.done { opacity:0; visibility:hidden; pointer-events:none; }
       .walk-stage { position:relative; width:min(68%,520px); height:52%; flex:none; display:flex; align-items:flex-end; justify-content:center; }
@@ -26,10 +26,55 @@
       .loading-track { width:min(55%,420px); height:clamp(20px,5vh,32px); padding:2px; border:3px solid #193451; border-radius:99px; background:#fff; overflow:hidden; }
       .loading-fill { width:0%; height:100%; border-radius:99px; background:#00a9e8; transition:width .12s linear; }
       .loading-label { margin:0; color:#062679; font-size:clamp(22px,5vh,36px); font-weight:700; letter-spacing:.01em; }
+      .brand-screen { position:absolute; z-index:5; inset:0; overflow:hidden; display:grid; grid-template-columns:minmax(0,.92fr) minmax(0,1.08fr); align-items:center; padding:7% 8% 8%; color:#25043b; background:#fff; cursor:pointer; opacity:1; transition:opacity .48s ease; isolation:isolate; }
+      .brand-screen.leaving { opacity:0; pointer-events:none; }
+      .brand-screen:focus-visible { outline:4px solid #fa83c9; outline-offset:-8px; }
+      .brand-copy { position:relative; z-index:2; max-width:540px; animation:brand-content-in .7s .1s both; }
+      .brand-kicker { margin:0 0 12px; color:#87205e; font-size:clamp(12px,1.8vh,17px); font-weight:700; letter-spacing:.14em; text-transform:uppercase; }
+      .brand-title { max-width:10ch; margin:0; color:#321047; font-size:clamp(32px,7.2vh,68px); line-height:.99; letter-spacing:-.045em; font-weight:800; text-wrap:balance; }
+      .brand-visual { position:relative; align-self:stretch; display:grid; place-items:center; min-width:0; }
+      .brand-momo { position:relative; z-index:2; width:min(35vw,48vh); max-width:78%; max-height:67%; object-fit:contain; animation:brand-momo-in .8s .18s cubic-bezier(.2,.8,.2,1) both; }
+      .brand-icon { position:absolute; z-index:1; display:grid; place-items:center; width:clamp(44px,8vh,78px); aspect-ratio:1; border:2px solid currentColor; border-radius:17px; background:#fff; }
+      .brand-icon svg { width:57%; height:57%; }
+      .brand-icon.cyan { color:#007aa8; top:11%; left:15%; transform:rotate(-8deg); }
+      .brand-icon.green { color:#00876c; top:18%; right:8%; border-radius:50%; }
+      .brand-icon.yellow { color:#987400; bottom:13%; left:11%; border-radius:50%; }
+      .brand-icon.pink { color:#b21b7d; bottom:12%; right:10%; transform:rotate(8deg); }
+      .brand-prompt { position:absolute; z-index:3; left:0; right:0; bottom:3.1%; margin:0; color:#533064; text-align:center; font-size:clamp(13px,2.2vh,18px); font-weight:600; letter-spacing:.015em; animation:brand-prompt-pulse 1.7s ease-in-out infinite; }
+      @keyframes brand-content-in { from { opacity:0; transform:translateY(12px); } to { opacity:1; transform:translateY(0); } }
+      @keyframes brand-momo-in { from { opacity:0; transform:translateY(18px) scale(.94); } to { opacity:1; transform:translateY(0) scale(1); } }
+      @keyframes brand-prompt-pulse { 0%,100% { opacity:.56; } 50% { opacity:1; } }
+      .welcome-screen { position:absolute; z-index:4; inset:0; display:grid; grid-template-columns:1fr 1fr; align-items:center; justify-items:center; gap:3%; padding:6% 9%; background:#fff; }
+      .welcome-momo { display:block; width:min(31vw,48vh); max-width:72%; max-height:78%; object-fit:contain; }
+      .welcome-copy { display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; color:#080808; }
+      .welcome-copy h1 { margin:0; font-size:clamp(22px,4vh,34px); line-height:1.2; font-weight:700; }
+      .welcome-copy p { margin:10px 0 0; font-size:clamp(18px,3.2vh,27px); line-height:1.25; font-weight:600; }
+      .welcome-start { display:inline-flex; align-items:center; justify-content:center; gap:12px; min-width:174px; min-height:54px; margin-top:clamp(18px,3.4vh,28px); padding:10px 20px; border:3px solid var(--navy); border-radius:14px; background:var(--blue); color:#030303; box-shadow:0 3px 0 rgb(6 38 121 / 20%); font-size:clamp(17px,2.7vh,22px); font-weight:700; cursor:pointer; touch-action:manipulation; }
+      .welcome-start:hover { background:#36d5ff; }
+      .welcome-start:active { transform:translateY(2px); box-shadow:none; }
+      .welcome-start:focus-visible { outline:4px solid var(--yellow); outline-offset:4px; }
+      .welcome-start svg { width:22px; height:22px; }
       .slide { position:absolute; inset:0; display:none; overflow:hidden; background:#fff; }
-      .slide.active { display:block; animation:show .2s ease-out both; }
-      @keyframes show { from {opacity:.65} to {opacity:1} }
-      .route-empty { background:#fff; }
+      .slide.active { display:block; }
+      .celebration { background:#fff; }
+      .celebration-confetti { position:absolute; z-index:1; inset:0; overflow:hidden; pointer-events:none; }
+      .confetti-piece { position:absolute; top:-8%; left:var(--x); width:var(--size); height:calc(var(--size) * 1.55); border-radius:2px; background:var(--color); opacity:0; animation:confetti-fall var(--duration) linear var(--delay) infinite; }
+      @keyframes confetti-fall {
+        0% { transform:translate3d(0,-4vh,0) rotate(0); opacity:0; }
+        10% { opacity:.92; }
+        88% { opacity:.86; }
+        100% { transform:translate3d(var(--drift),112vh,0) rotate(var(--turn)); opacity:0; }
+      }
+      .celebration-content { position:absolute; z-index:2; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; padding:4% 8% 10%; text-align:center; pointer-events:none; }
+      .celebration h1 { max-width:22ch; margin:0; color:var(--navy); font-size:clamp(30px,6.2vh,60px); line-height:1.08; font-weight:800; letter-spacing:-.025em; }
+      .celebration p { margin:12px 0 0; color:#263f7b; font-size:clamp(21px,4.1vh,36px); line-height:1.15; font-weight:700; }
+      .celebration-momo { position:relative; top:2.5%; display:block; width:min(35vw,43vh); height:40%; max-height:300px; margin-top:1.5%; object-fit:contain; transform-origin:50% 88%; animation:celebration-hop 1.65s ease-in-out infinite; }
+      @keyframes celebration-hop {
+        0%, 100% { transform:translateY(0) rotate(0); }
+        28% { transform:translateY(-12%) rotate(-4deg); }
+        48% { transform:translateY(0) rotate(2deg); }
+        70% { transform:translateY(-6%) rotate(3deg); }
+      }
       .intro { display:grid; grid-template-columns: 1fr 1fr; height:100%; background:#fff; }
       .intro-art { display:grid; place-items:center; position:relative; overflow:hidden; background:#e9faff; }
       .intro-art::before { content:""; position:absolute; width:52vw; height:52vw; border-radius:50%; background:#c8f4ff; right:-26vw; top:-35vw; }
@@ -45,46 +90,74 @@
       .route-card { width:min(31%,255px); height:min(76%,266px); min-height:0; border:4px solid var(--blue); border-radius:36px; padding:14px 12px 16px; display:flex; flex-direction:column; align-items:center; justify-content:space-between; color:#080808; box-shadow:none; }
       .route-card img { display:block; width:76%; height:68%; object-fit:contain; }
       .route-card strong { font-size:clamp(17px,3.8vh,24px); line-height:1.15; text-align:center; white-space:nowrap; }
+      @container (max-width: 720px) {
+        .picker-screen { padding:5% 4% 4%; }
+        .picker-title { font-size:clamp(17px,5.4cqh,27px); }
+        .route-options { gap:clamp(14px,5cqw,38px); padding-top:4px; }
+        .route-card { width:min(36%,255px); height:min(78%,266px); padding:10px 8px 12px; border-width:3px; border-radius:28px; }
+        .route-card img { width:88%; height:70%; }
+        .route-card strong { font-size:clamp(16px,5cqh,22px); }
+      }
       .garden-card { background:#00e6b8; }
       .shortest-card { background:var(--yellow); cursor:pointer; transition:transform .14s ease, box-shadow .14s ease; }
       .shortest-card:hover { transform:translateY(-3px); box-shadow:0 7px 0 rgb(6 38 121 / 14%); }
       .shortest-card:active { transform:translateY(2px); box-shadow:none; }
       .shortest-card:focus-visible { outline:4px solid var(--navy); outline-offset:4px; }
       .route-ui[hidden], .picker-screen[hidden] { display:none !important; }
+      .welcome-screen[hidden] { display:none !important; }
+      .brand-screen[hidden] { display:none !important; }
       .route-step-one { background:#fff; }
       .route-step-one-photo { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; object-position:center 78%; }
-      .route-step-one-momo { position:absolute; z-index:2; left:57%; top:40%; width:19%; height:40%; }
-      .route-step-one-momo img { position:absolute; inset:0; width:100%; height:100%; object-fit:contain; }
-      .route-step-one-arm { transform-origin:34% 65.4%; animation:momo-arm-point 3.4s ease-in-out infinite; }
-      @keyframes momo-arm-point {
-        0%, 14%, 100% { transform:rotate(0deg); }
-        42%, 59% { transform:rotate(48deg); }
-        84% { transform:rotate(0deg); }
+      .route-step-one-momo { position:absolute; z-index:2; left:57%; top:40%; width:19%; height:40%; animation:momo-route-one-path 6.2s linear 1 both; }
+      .route-step-one-momo img { display:block; width:100%; height:100%; object-fit:contain; transform-origin:50% 88%; animation:momo-route-one-motion 6.2s ease-in-out 1 both; }
+      @keyframes momo-route-one-path {
+        0%, 18% { transform:translate(0,0) scale(1); }
+        28% { transform:translate(-14%,-15%) scale(.94); }
+        38% { transform:translate(-29%,-31%) scale(.86); }
+        48% { transform:translate(-43%,-47%) scale(.78); }
+        58% { transform:translate(-58%,-63%) scale(.69); }
+        68%, 100% { transform:translate(-73%,-78%) scale(.45); }
+      }
+      @keyframes momo-route-one-motion {
+        0%, 3%, 8%, 11%, 16%, 18%, 100% { transform:translateY(0) rotate(0) scale(1); }
+        5% { transform:translateY(-8%) rotate(-3deg) scale(1.04); }
+        13% { transform:translateY(-7%) rotate(3deg) scale(1.04); }
+        25%, 35%, 45%, 55%, 65% { transform:translateY(-2.5%) rotate(-5deg) scale(1); }
+        30%, 40%, 50%, 60% { transform:translateY(0) rotate(5deg) scale(1); }
+        76% { transform:translateY(-8%) rotate(-3deg) scale(1.05); }
+        82%, 87% { transform:translateY(0) rotate(0) scale(1); }
       }
       .route-instruction { position:absolute; z-index:3; left:28%; top:57.5%; width:30.3%; aspect-ratio:256 / 71; margin:0; padding:4px 2.5%; display:grid; grid-template-rows:repeat(2,auto); align-content:center; justify-items:center; border:5px solid var(--blue); border-radius:25px; background:var(--yellow); color:#030303; text-align:center; font-size:clamp(16px,2.6vw,22px); line-height:1.25; }
       .route-instruction span { display:block; white-space:nowrap; }
       .route-instruction strong { font-weight:800; }
       .route-step-two-photo { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; object-position:center 50%; }
-      .route-step-two-momo { position:absolute; z-index:2; left:14%; top:57%; width:21%; height:39%; }
-      .route-step-two-momo img { position:absolute; inset:0; width:100%; height:100%; object-fit:contain; }
-      .route-step-two-arm { transform-origin:69% 54.3%; animation:momo-escalator-lift 3.6s ease-in-out infinite; }
-      @keyframes momo-escalator-lift {
-        0%, 16%, 100% { transform:rotate(40deg); }
-        42%, 68% { transform:rotate(0deg); }
-        86% { transform:rotate(40deg); }
+      .route-step-two-momo { position:absolute; z-index:2; left:14%; top:57%; width:21%; height:39%; animation:momo-escalator-path 8s linear infinite; }
+      .route-step-two-momo img { display:block; width:100%; height:100%; object-fit:contain; transform-origin:50% 90%; animation:momo-escalator-motion 8s linear infinite; }
+      @keyframes momo-escalator-path {
+        0%, 10% { transform:translateX(0); }
+        16% { transform:translateX(9%); }
+        22% { transform:translateX(18%); }
+        28% { transform:translateX(27%); }
+        34% { transform:translateX(36%); }
+        40% { transform:translateX(44%); }
+        50%, 100% { transform:translateX(50%); }
+      }
+      @keyframes momo-escalator-motion {
+        0%, 5% { transform:translateX(5%) rotate(2deg); }
+        2.5%, 7.5%, 10%, 50%, 100% { transform:translate(0,0) rotate(0); }
+        12%, 19%, 26%, 33%, 40%, 46.25% { transform:translateY(-2.5%) rotate(-5deg); }
+        15.5%, 22.5%, 29.5%, 36.5%, 43.5%, 48.75% { transform:translateY(0) rotate(5deg); }
       }
       .route-instruction-two { position:absolute; z-index:3; left:9%; top:29%; width:30.5%; aspect-ratio:256 / 71; margin:0; padding:4px 2.5%; display:grid; place-items:center; border:5px solid var(--blue); border-radius:25px; background:var(--yellow); color:#030303; text-align:center; font-size:clamp(16px,2.6vw,22px); line-height:1.25; white-space:nowrap; }
       .route-instruction-two span { white-space:nowrap; }
       .route-instruction-two strong { font-weight:800; }
       .route-step-three-photo { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; object-position:center 50%; }
-      .route-step-three-momo { position:absolute; z-index:2; left:69%; top:57%; width:20%; height:38%; object-fit:contain; transform:scaleX(-1); }
-      .route-step-three-attention { position:absolute; z-index:3; left:67.2%; top:72%; width:5.2%; height:10%; overflow:visible; animation:momo-attention-blink 1.5s ease-in-out infinite; transform-origin:center; }
-      .route-step-three-attention path { fill:none; stroke:var(--blue); stroke-width:8; stroke-linecap:round; stroke-linejoin:round; }
-      @keyframes momo-attention-blink {
-        0%, 38%, 68%, 100% { opacity:1; transform:scale(1); }
-        50%, 58% { opacity:0; transform:scale(.88); }
+      .route-step-three-momo { position:absolute; z-index:2; left:3.25%; top:50.5%; width:18%; height:34%; object-fit:contain; transform-origin:50% 85%; animation:momo-gantry-nudge 2.5s ease-in-out infinite; }
+      @keyframes momo-gantry-nudge {
+        0%, 10%, 20%, 100% { transform:translateX(0); }
+        5%, 15% { transform:translateX(4%); }
       }
-      .route-instruction-three { position:absolute; z-index:3; left:61%; top:34%; width:31%; aspect-ratio:256 / 71; margin:0; padding:4px 2.5%; display:grid; place-items:center; border:5px solid var(--blue); border-radius:25px; background:var(--yellow); color:#030303; text-align:center; font-size:clamp(16px,2.6vw,22px); line-height:1.25; }
+      .route-instruction-three { position:absolute; z-index:3; left:7.5%; top:18.5%; width:31%; aspect-ratio:256 / 71; margin:0; padding:4px 2.5%; display:grid; place-items:center; border:5px solid var(--blue); border-radius:25px; background:var(--yellow); color:#030303; text-align:center; font-size:clamp(16px,2.6vw,22px); line-height:1.25; }
       .route-instruction-three span { white-space:nowrap; }
       .route-instruction-three strong { font-weight:800; }
       .route-step-four-photo { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; object-position:center 50%; }
@@ -99,25 +172,133 @@
       .route-instruction-four strong { font-weight:800; }
       .route-step-four-card-cover { position:absolute; z-index:3; left:51.7%; top:74.5%; width:10%; height:7%; background:#de725d; transform:rotate(-20deg); pointer-events:none; }
       .route-step-five-photo { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; object-position:center 50%; }
-      .route-step-five-momo { position:absolute; z-index:2; left:68%; top:30.5%; width:35.7%; height:50%; }
-      .route-step-five-momo img { position:absolute; inset:0; width:100%; height:100%; object-fit:contain; }
-      .route-step-five-wave-arm { transform-origin:30.4% 43.2%; animation:momo-dao-dao-wave 2.2s ease-in-out infinite; }
-      @keyframes momo-dao-dao-wave {
-        0%, 24%, 100% { transform:rotate(0deg); }
-        50%, 74% { transform:rotate(-7deg); }
+      .route-step-five-momo { position:absolute; z-index:2; left:71.05%; top:35%; width:29.5%; height:41%; transform-origin:50% 90%; animation:momo-page-six-bounce 1.45s ease-in-out infinite; }
+      .route-step-five-momo-character { display:block; width:100%; height:100%; object-fit:contain; transform:scaleX(-1); }
+      @keyframes momo-page-six-bounce {
+        0%, 100% { transform:translateY(0) scale(1); }
+        38% { transform:translateY(-4%) scale(1.025); }
+        58% { transform:translateY(0) scale(1); }
+        76% { transform:translateY(-1.5%) scale(1.01); }
       }
       .route-instruction-five { position:absolute; z-index:3; left:43%; top:14%; width:30.5%; aspect-ratio:256 / 71; margin:0; padding:4px 2.5%; display:grid; grid-template-rows:repeat(2,auto); align-content:center; justify-items:center; border:5px solid var(--blue); border-radius:25px; background:var(--yellow); color:#030303; text-align:center; font-size:clamp(16px,2.6vw,22px); line-height:1.25; }
       .route-instruction-five span { display:block; white-space:nowrap; }
       .route-instruction-five strong { font-weight:800; }
       .route-step-six { background:#17222c; }
       .route-step-six-photo { position:absolute; z-index:1; inset:0; width:100%; height:100%; object-fit:cover; object-position:center 50%; }
-      .route-step-six-momo { position:absolute; z-index:2; left:50.5%; top:45.5%; width:25%; height:35%; object-fit:contain; }
+      .route-step-six-momo { position:absolute; z-index:2; left:46.5%; top:43.5%; width:25%; height:35%; object-fit:contain; animation:momo-escalator-gentle-nudge 2.5s ease-in-out infinite; }
+      @keyframes momo-escalator-gentle-nudge {
+        0%, 8%, 16%, 100% { transform:translateX(0); }
+        4%, 12% { transform:translateX(3%); }
+      }
       .route-instruction-six { position:absolute; z-index:3; left:49.5%; top:18%; width:33%; aspect-ratio:256 / 71; margin:0; padding:4px 1.5%; display:flex; justify-content:center; align-items:center; border:5px solid var(--blue); border-radius:25px; background:var(--yellow); color:#030303; text-align:center; font-size:clamp(16px,2.4vw,20px); line-height:1.25; white-space:nowrap; }
       .route-instruction-six strong { font-weight:800; }
       .route-step-seven-photo { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; object-position:center 50%; }
-      .route-step-seven-momo { position:absolute; z-index:2; left:51.2%; top:40.3%; width:10%; height:21.5%; object-fit:contain; }
+      .route-step-seven-momo { position:absolute; z-index:2; left:51.2%; top:40.3%; width:10%; height:21.5%; object-fit:contain; transform-origin:50% 90%; animation:momo-exit-door-attention 5.7s ease-in-out infinite; }
+      @keyframes momo-exit-door-attention {
+        0%, 4%, 22.8%, 33.3%, 68.4%, 78.9%, 100% { transform:translate(0,0) rotate(0); }
+        6% { transform:translateY(-12%) rotate(-4deg); }
+        9% { transform:translateY(0) rotate(3deg); }
+        12% { transform:translateY(-12%) rotate(4deg); }
+        15% { transform:translateY(0) rotate(-2deg); }
+        24.5%, 27.9%, 70.1%, 73.5% { transform:translateX(5%); }
+        26.2%, 29.6%, 71.8%, 75.2% { transform:translateX(0); }
+      }
       .route-instruction-seven { position:absolute; z-index:3; left:55.2%; top:9.7%; width:33%; aspect-ratio:278 / 71; margin:0; padding:4px 1.5%; display:flex; justify-content:center; align-items:center; border:5px solid var(--blue); border-radius:25px; background:var(--yellow); color:#030303; text-align:center; font-size:clamp(16px,2.6vw,22px); line-height:1.25; white-space:nowrap; }
       .route-instruction-seven strong { font-weight:800; }
+      .route-step-nine-photo { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; object-position:center 50%; }
+      .route-step-nine-momo { position:absolute; z-index:2; left:60%; top:49%; width:12%; height:24%; object-fit:contain; transform-origin:50% 90%; animation:momo-mccann-walk-loop 10s ease-in-out infinite; }
+      @keyframes momo-mccann-walk-loop {
+        0% { opacity:0; transform:translateY(0) scale(1) rotate(0); }
+        1.2% { opacity:1; transform:translateY(0) scale(1) rotate(0); }
+        3.6% { transform:translateY(-3%) scale(.98) rotate(-5deg); }
+        7.2% { transform:translateY(-8%) scale(.96) rotate(5deg); }
+        10.7% { transform:translateY(-10%) scale(.94) rotate(-5deg); }
+        14.3% { transform:translateY(-15%) scale(.92) rotate(5deg); }
+        17.9% { transform:translateY(-18%) scale(.9) rotate(-5deg); }
+        21.4% { transform:translateY(-23%) scale(.87) rotate(5deg); }
+        25% { transform:translateY(-29%) scale(.84) rotate(-5deg); }
+        30%, 56%, 86% { opacity:1; transform:translateY(-45%) scale(.8) rotate(0); }
+        31% { transform:translateY(-65%) scale(.8) rotate(-3deg); }
+        36% { transform:translateY(-45%) scale(.8) rotate(3deg); }
+        41% { transform:translateY(-65%) scale(.8) rotate(3deg); }
+        46% { transform:translateY(-45%) scale(.8) rotate(-3deg); }
+        51% { transform:translateY(-65%) scale(.8) rotate(-3deg); }
+        92% { opacity:0; transform:translateY(-45%) scale(.8) rotate(0); }
+        100% { opacity:0; transform:translateY(0) scale(1) rotate(0); }
+      }
+      .route-instruction-nine { position:absolute; z-index:3; left:59%; top:12%; width:32%; aspect-ratio:256 / 71; margin:0; padding:4px 1.5%; display:grid; grid-template-rows:repeat(2,auto); align-content:center; justify-items:center; border:5px solid var(--blue); border-radius:25px; background:var(--yellow); color:#030303; text-align:center; font-size:clamp(16px,2.6vw,22px); line-height:1.2; }
+      .route-instruction-nine span { display:block; white-space:nowrap; }
+      .route-instruction-nine strong { font-weight:800; }
+      .route-step-ten-photo { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; object-position:center 15%; }
+      .route-instruction-ten { position:absolute; z-index:3; left:13.5%; top:13.5%; width:38%; aspect-ratio:256 / 71; margin:0; padding:4px 1.5%; display:grid; grid-template-rows:repeat(2,auto); align-content:center; justify-items:center; border:5px solid var(--blue); border-radius:25px; background:var(--yellow); color:#030303; text-align:center; font-size:clamp(16px,2.6vw,22px); line-height:1.2; }
+      .route-instruction-ten span { display:block; white-space:nowrap; }
+      .route-instruction-ten strong { font-weight:800; }
+      .route-step-eleven-photo { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; object-position:center 50%; }
+      .route-step-eleven-momo { position:absolute; z-index:2; left:53.5%; top:54%; width:26%; height:44%; object-fit:contain; transform-origin:70% 56%; animation:momo-press-crossing-button 3.4s ease-in-out infinite; }
+      @keyframes momo-press-crossing-button {
+        0%, 18%, 100% { transform:translate(0,0) rotate(0deg); }
+        43%, 62% { transform:translate(-26%,-47%) rotate(-7deg); }
+        86% { transform:translate(0,0) rotate(0deg); }
+      }
+      .route-instruction-eleven { position:absolute; z-index:3; left:60%; top:13%; width:33%; aspect-ratio:256 / 71; margin:0; padding:4px 1.5%; display:grid; grid-template-rows:repeat(2,auto); align-content:center; justify-items:center; border:5px solid var(--blue); border-radius:25px; background:var(--yellow); color:#030303; text-align:center; font-size:clamp(16px,2.6vw,22px); line-height:1.2; }
+      .route-instruction-eleven span { display:block; white-space:nowrap; }
+      .route-instruction-eleven strong { font-weight:800; }
+      .route-step-twelve-photo { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; object-position:center 50%; }
+      .route-step-twelve-momo { position:absolute; z-index:2; left:48%; top:46%; width:9%; height:22%; object-fit:contain; animation:momo-cross-wait-jump 1.7s ease-in-out infinite; }
+      @keyframes momo-cross-wait-jump {
+        0%, 40%, 100% { transform:translateY(0) scaleX(-1); }
+        20% { transform:translateY(-14%) scaleX(-1); }
+      }
+      .route-instruction-twelve { position:absolute; z-index:3; left:59%; top:15%; width:33%; aspect-ratio:256 / 71; margin:0; padding:4px 1.5%; display:grid; grid-template-rows:repeat(2,auto); align-content:center; justify-items:center; border:5px solid var(--blue); border-radius:25px; background:var(--yellow); color:#030303; text-align:center; font-size:clamp(16px,2.6vw,22px); line-height:1.2; }
+      .route-instruction-twelve span { display:block; white-space:nowrap; }
+      .route-instruction-twelve strong { font-weight:800; }
+      .route-step-thirteen-photo { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; object-position:center 50%; }
+      .route-step-thirteen-momo { position:absolute; z-index:2; left:38.5%; top:66%; width:16.5%; height:34%; object-fit:contain; transform-origin:50% 90%; animation:momo-continue-walk 2.4s ease-in-out 1 forwards; }
+      @keyframes momo-continue-walk {
+        0% { transform:translate(0,0) scale(1) rotate(0); }
+        15% { transform:translate(-1%,-4%) scale(.98) rotate(-5deg); }
+        30% { transform:translate(-2%,-9%) scale(.95) rotate(5deg); }
+        45% { transform:translate(-3%,-15%) scale(.92) rotate(-5deg); }
+        60% { transform:translate(-4%,-21%) scale(.9) rotate(5deg); }
+        80% { transform:translate(-5%,-26%) scale(.87) rotate(-3deg); }
+        100% { transform:translate(-6%,-28%) scale(.85) rotate(0); }
+      }
+      .route-instruction-thirteen { position:absolute; z-index:3; left:40.5%; top:17%; width:37%; aspect-ratio:256 / 71; margin:0; padding:4px 1.5%; display:flex; justify-content:center; align-items:center; border:5px solid var(--blue); border-radius:25px; background:var(--yellow); color:#030303; text-align:center; font-size:clamp(16px,2.6vw,22px); line-height:1.2; white-space:nowrap; }
+      .route-instruction-thirteen strong { font-weight:800; }
+      .route-step-fourteen-photo { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; object-position:center 50%; }
+      .route-step-fourteen-momo { position:absolute; z-index:2; left:49.5%; top:44%; width:24.5%; height:44%; object-fit:contain; animation:momo-bus-stop-nudge 1.8s ease-in-out infinite; }
+      @keyframes momo-bus-stop-nudge {
+        0%, 30%, 100% { transform:translateX(0); }
+        15% { transform:translateX(-4%); }
+      }
+      .route-instruction-fourteen { position:absolute; z-index:3; left:27%; top:16%; width:38%; aspect-ratio:256 / 71; margin:0; padding:4px 1.5%; display:flex; justify-content:center; align-items:center; border:5px solid var(--blue); border-radius:25px; background:var(--yellow); color:#030303; text-align:center; font-size:clamp(16px,2.6vw,22px); line-height:1.2; white-space:nowrap; }
+      .route-instruction-fourteen strong { font-weight:800; }
+      .route-step-fifteen-photo { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; object-position:center 50%; transform:translateX(9%) scale(1.1); transform-origin:center center; }
+      .route-step-fifteen-momo { position:absolute; z-index:2; left:18%; top:45%; width:24%; height:37%; object-fit:contain; animation:momo-bibik-violet-nudge 2.4s ease-in-out infinite; }
+      @keyframes momo-bibik-violet-nudge {
+        0%, 10%, 20%, 100% { transform:translateX(0); }
+        5%, 15% { transform:translateX(4%); }
+      }
+      .route-instruction-fifteen { position:absolute; z-index:3; left:5.5%; top:28.5%; width:37%; aspect-ratio:256 / 71; margin:0; padding:4px 1.5%; display:grid; grid-template-rows:repeat(2,auto); align-content:center; justify-items:center; border:5px solid var(--blue); border-radius:25px; background:var(--yellow); color:#030303; text-align:center; font-size:clamp(16px,2.6vw,22px); line-height:1.2; }
+      .route-instruction-fifteen span { display:block; white-space:nowrap; }
+      .route-instruction-fifteen strong { font-weight:800; }
+      .route-step-sixteen-photo { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; object-position:center 50%; }
+      .route-step-sixteen-momo { position:absolute; z-index:2; left:49%; top:62%; width:22%; height:36%; object-fit:contain; transform-origin:50% 90%; animation:momo-arrival-celebrate 4.2s ease-in-out infinite; }
+      @keyframes momo-arrival-celebrate {
+        0%, 8%, 100% { transform:translateY(0) rotate(0); }
+        14% { transform:translateY(-18%) rotate(-5deg); }
+        21% { transform:translateY(0) rotate(4deg); }
+        28% { transform:translateY(0) rotate(0); }
+        35% { transform:translateY(-18%) rotate(5deg); }
+        42% { transform:translateY(0) rotate(-4deg); }
+        49% { transform:translateY(0) rotate(0); }
+        56% { transform:translateY(-18%) rotate(-5deg); }
+        63% { transform:translateY(0) rotate(4deg); }
+        67%, 70%, 100% { transform:translateY(0) rotate(0); }
+      }
+      .route-instruction-sixteen { position:absolute; z-index:3; left:60%; top:39%; width:35%; aspect-ratio:256 / 71; margin:0; padding:4px 1.5%; display:grid; grid-template-rows:repeat(2,auto); align-content:center; justify-items:center; border:5px solid var(--blue); border-radius:25px; background:var(--yellow); color:#030303; text-align:center; font-size:clamp(16px,2.6vw,22px); line-height:1.2; }
+      .route-instruction-sixteen span { display:block; white-space:nowrap; }
+      .route-instruction-sixteen strong { font-weight:800; }
       .controls { position:absolute; z-index:5; inset:auto 16px max(18px,env(safe-area-inset-bottom)); display:flex; justify-content:space-between; align-items:center; gap:12px; pointer-events:none; }
       .control { pointer-events:auto; border:3px solid var(--blue); border-radius:16px; min-width:58px; min-height:52px; padding:10px 17px; display:inline-flex; justify-content:center; align-items:center; gap:9px; background:var(--yellow); color:#101828; box-shadow:0 4px 0 #d2b000; font-size:clamp(16px,2.5vh,21px); font-weight:800; cursor:pointer; touch-action:manipulation; }
       .control { min-width:104px; min-height:56px; }
@@ -126,7 +307,7 @@
       .control[disabled] { visibility:hidden; }
       #next[hidden] { display:none !important; }
       .control svg { width:22px; height:22px; }
-      .counter { position:absolute; pointer-events:none; left:50%; bottom:12px; transform:translateX(-50%); padding:8px 12px; border-radius:99px; color:#fff; background:rgb(6 38 121 / 90%); font-size:14px; font-weight:800; text-shadow:0 1px 2px #000; white-space:nowrap; }
+      .counter { position:absolute; z-index:5; pointer-events:none; left:50%; bottom:12px; transform:translateX(-50%); padding:8px 12px; border-radius:99px; color:#fff; background:rgb(6 38 121 / 90%); font-size:14px; font-weight:800; text-shadow:0 1px 2px #000; white-space:nowrap; }
       .home-control { position:absolute; z-index:6; top:max(17px,env(safe-area-inset-top)); right:max(18px,env(safe-area-inset-right)); width:54px; height:54px; display:grid; place-items:center; border:3px solid var(--blue); border-radius:14px; background:var(--yellow); box-shadow:0 4px 0 #d2b000; color:#101828; cursor:pointer; }
       .home-control svg { width:27px; height:27px; }
       .home-control:focus-visible { outline:4px solid #fff; outline-offset:3px; }
@@ -148,6 +329,19 @@
         .book { margin:auto; }
         body { display:grid; place-items:center; }
       }
+      @media (max-width:620px) and (orientation:landscape) {
+        .brand-screen { padding:7% 6% 9%; grid-template-columns:.95fr 1.05fr; }
+        .brand-kicker { margin-bottom:7px; }
+        .brand-title { font-size:clamp(25px,6.4vh,46px); }
+        .brand-icon { width:clamp(34px,7vh,52px); border-radius:12px; }
+        .brand-momo { width:min(38vw,45vh); }
+        .brand-prompt { bottom:2.4%; }
+        .celebration-content { padding-bottom:12%; }
+        .celebration h1 { font-size:clamp(24px,6vh,39px); }
+        .celebration p { margin-top:8px; font-size:clamp(18px,3.6vh,25px); }
+        .celebration-momo { top:2%; width:min(34vw,38vh); height:36%; }
+      }
+      @media (prefers-reduced-motion:reduce) { .confetti-piece,.celebration-momo { animation:none!important; } }
       @media (prefers-reduced-motion:reduce) { *,*::before,*::after { animation-duration:.01ms!important; transition-duration:.01ms!important; } }
     </style>
   </head>
@@ -159,7 +353,31 @@
         <div class="loading-track" role="progressbar" aria-label="Loading" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><div class="loading-fill" id="loadingFill"></div></div>
         <p class="loading-label">Loading…</p>
       </div>
-      <section class="picker-screen" id="pickerScreen" aria-labelledby="pickerTitle">
+      <section class="brand-screen" id="brandScreen" role="button" tabindex="0" aria-label="New Everyday Life, By Design. Tap to continue." aria-describedby="brandPrompt">
+        <div class="brand-copy">
+          <p class="brand-kicker">Temasek Shophouse</p>
+          <h1 class="brand-title" tabindex="-1">New Everyday Life, By Design</h1>
+        </div>
+        <div class="brand-visual" aria-hidden="true">
+          <span class="brand-icon cyan"><svg viewBox="0 0 24 24" fill="none"><path d="M4 7h14m-4-4 4 4-4 4M20 17H6m4-4-4 4 4 4" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          <span class="brand-icon green"><svg viewBox="0 0 24 24" fill="none"><path d="M5 20V9l7-5 7 5v11M9 20v-6h6v6M3 20h18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          <span class="brand-icon yellow"><svg viewBox="0 0 24 24" fill="none"><path d="M12 3v18M12 9 6 4M12 9l6-5M12 15l-6-5M12 15l6-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          <span class="brand-icon pink"><svg viewBox="0 0 24 24" fill="none"><path d="M4 12h15m-5-6 6 6-6 6" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          <img class="brand-momo" src="assets/momo-branding-figma.png" alt="" />
+        </div>
+        <p class="brand-prompt" id="brandPrompt">Tap anywhere to continue</p>
+      </section>
+      <section class="welcome-screen" id="welcomeScreen" aria-labelledby="welcomeTitle" hidden>
+        <img class="welcome-momo" src="assets/momo-welcome-figma.png" alt="Momo, your friendly blue guide" />
+        <div class="welcome-copy">
+          <h1 id="welcomeTitle" tabindex="-1">Hi, I’m Momo!</h1>
+          <p>I will be your guide for today</p>
+          <button class="welcome-start" id="welcomeStartButton" type="button">Let’s Start
+            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h13m-5-6 6 6-6 6" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+        </div>
+      </section>
+      <section class="picker-screen" id="pickerScreen" aria-labelledby="pickerTitle" hidden>
         <h1 class="picker-title" id="pickerTitle">What would you like to explore today?</h1>
         <div class="route-options">
           <div class="route-card garden-card" aria-label="Garden Route, coming later"><img src="assets/garden-route.png" alt="Momo holding a flower" /><strong>Garden Route</strong></div>
@@ -178,26 +396,21 @@
       </section>
       <section class="slide route-step-one" aria-label="Step 1: From the star, walk to the escalator">
         <img class="route-step-one-photo" src="assets/escalator-floor.png" alt="Station concourse with an escalator and a red star on the floor." />
-        <div class="route-step-one-momo" role="img" aria-label="Momo points down to the star, then up toward the station signboard.">
-          <img class="route-step-one-base" src="assets/momo-route-step-1-base.png" alt="" />
-          <img class="route-step-one-arm" src="assets/momo-route-step-1-arm.png" alt="" />
+        <div class="route-step-one-momo" role="img" aria-label="Momo jumps, waddles toward the escalator sign, and celebrates when he arrives.">
+          <img src="assets/momo-route-step-1.png" alt="" />
         </div>
         <p class="route-instruction"><span>From the <strong>star</strong>, walk to</span><span>the <strong>escalator</strong></span></p>
       </section>
       <section class="slide route-step-two" aria-label="Step 2: Go up the escalator">
         <img class="route-step-two-photo" src="assets/escalator-floor-step-2.png" alt="Station concourse with a prominent escalator." />
-        <div class="route-step-two-momo" role="img" aria-label="Momo lifts his hand from a lower position to point toward the escalator.">
-          <img class="route-step-two-base" src="assets/momo-route-step-2-base.png" alt="" />
-          <img class="route-step-two-arm" src="assets/momo-route-step-2-arm.png" alt="" />
+        <div class="route-step-two-momo" role="img" aria-label="Momo pauses, nudges toward the escalator, waddles to its base, and waits there.">
+          <img src="assets/momo-route-step-2.png" alt="" />
         </div>
         <p class="route-instruction-two"><span><strong>Go up</strong> the <strong>escalator</strong></span></p>
       </section>
       <section class="slide route-step-three" aria-label="Step 3: Turn right to the gantry">
         <img class="route-step-three-photo" src="assets/gantry-route.jpg" alt="A station concourse with a large overhead line sign and ticket gates." />
-        <img class="route-step-three-momo" src="assets/momo-route-step-2.png" alt="Momo points left toward the route." />
-        <svg class="route-step-three-attention" viewBox="0 0 100 100" aria-hidden="true">
-          <path d="M 86 18 Q 69 11 55 2 M 78 48 L 48 48 M 84 75 Q 67 82 53 94" />
-        </svg>
+        <img class="route-step-three-momo" src="assets/momo-route-step-2.png" alt="Momo faces right and nudges toward the gantry." />
         <p class="route-instruction-three"><span><strong>Turn right</strong> to the <strong>gantry</strong></span></p>
       </section>
       <section class="slide route-step-four" aria-label="Step 4: Tap card to exit">
@@ -208,9 +421,8 @@
       </section>
       <section class="slide route-step-five" aria-label="Step 5: Walk towards Dao Dao shop">
         <img class="route-step-five-photo" src="assets/dao-dao-route.jpg" alt="A station concourse with ticketing service kiosks, an exit sign, and the Dao Dao shop." />
-        <div class="route-step-five-momo" role="img" aria-label="Momo waves his raised hand and points toward the Dao Dao shop.">
-          <img class="route-step-five-base" src="assets/momo-dao-dao-base.png" alt="" />
-          <img class="route-step-five-wave-arm" src="assets/momo-dao-dao-wave-arm.png" alt="" />
+        <div class="route-step-five-momo">
+          <img class="route-step-five-momo-character" src="assets/momo-dao-dao-figma-1014.png" alt="Momo waves toward the Dao Dao shop." />
         </div>
         <p class="route-instruction-five"><span><strong>Walk</strong> towards</span><span><strong>Dao Dao shop</strong></span></p>
       </section>
@@ -222,17 +434,72 @@
       <section class="slide route-step-seven" aria-label="Step 7: Walk towards exit door">
         <img class="route-step-seven-photo" src="assets/route-page-8-photo.jpg" alt="The station exit doors between two escalators, with a person and child walking toward them." />
         <img class="route-step-seven-momo" src="assets/momo-route-step-8.png" alt="Momo points toward the exit doors." />
-        <p class="route-instruction-seven"><strong>Walk</strong>&nbsp;towards&nbsp;exit&nbsp;door</p>
+        <p class="route-instruction-seven"><strong>Walk</strong>&nbsp;towards&nbsp;<strong>exit</strong>&nbsp;door</p>
       </section>
-      <section class="slide route-empty" aria-label="Empty route frame 8"></section>
-      <section class="slide route-empty" aria-label="Empty route frame 9"></section>
-      <section class="slide route-empty" aria-label="Empty route frame 10"></section>
-      <section class="slide route-empty" aria-label="Empty route frame 11"></section>
-      <section class="slide route-empty" aria-label="Empty route frame 12"></section>
-      <section class="slide route-empty" aria-label="Empty route frame 13"></section>
-      <section class="slide route-empty" aria-label="Empty route frame 14"></section>
-      <section class="slide route-empty" aria-label="Empty route frame 15"></section>
-      <section class="slide route-slide route-empty" aria-label="Empty route frame 16"></section>
+      <section class="slide route-step-nine" aria-label="Step 8: Walk straight to the McCANN building">
+        <img class="route-step-nine-photo" src="assets/route-page-9-photo.jpg" alt="A person and child walk along the covered walkway toward the McCANN building." />
+        <img class="route-step-nine-momo" src="assets/momo-route-step-10.png" alt="Momo points along the walkway." />
+        <p class="route-instruction-nine"><span><strong>Walk straight</strong>, you will</span><span>see <strong>McCANN</strong> building</span></p>
+      </section>
+      <section class="slide route-step-ten" aria-label="Step 9: Walk to the traffic light towards the McCaNN building">
+        <img class="route-step-ten-photo" src="assets/route-page-10-photo.jpg" alt="The Oldham Lane street sign above the McCANN building beside a traffic light and crosswalk." />
+        <p class="route-instruction-ten"><span>Walk to the <strong>traffic light</strong></span><span>towards <strong>McCaNN building</strong></span></p>
+      </section>
+      <section class="slide route-step-eleven" aria-label="Step 10: Press the button and wait for the traffic light">
+        <img class="route-step-eleven-photo" src="assets/route-page-13-photo.jpg" alt="A child presses the pedestrian crossing button beside the street." />
+        <img class="route-step-eleven-momo" src="assets/momo-route-step-11.png" alt="Momo moves up to press the pedestrian crossing button, then returns to his starting position." />
+        <p class="route-instruction-eleven"><span><strong>Press</strong> the button and</span><span><strong>wait</strong> for the <strong>traffic light</strong></span></p>
+      </section>
+      <section class="slide route-step-twelve" aria-label="Step 11: Only cross when it is green man">
+        <img class="route-step-twelve-photo" src="assets/route-page-12-photo.jpg" alt="A child presses the crossing button while the green pedestrian signal is lit." />
+        <img class="route-step-twelve-momo" src="assets/momo-route-step-12.png" alt="Momo jumps in place while you wait for the green pedestrian signal." />
+        <p class="route-instruction-twelve"><span><strong>Only cross</strong> when it is</span><span><strong>green man</strong></span></p>
+      </section>
+      <section class="slide route-step-thirteen" aria-label="Step 13: Continue walking straight">
+        <img class="route-step-thirteen-photo" src="assets/route-page-14-photo.jpg" alt="A covered sidewalk beside the McCANN building, with a family walking straight along the path." />
+        <img class="route-step-thirteen-momo" src="assets/momo-route-step-13.svg" alt="Momo walks up the sidewalk toward the family." />
+        <p class="route-instruction-thirteen"><strong>Continue</strong>&nbsp;walking&nbsp;<strong>straight</strong></p>
+      </section>
+      <section class="slide route-step-fourteen" aria-label="Step 14: You will pass by a bus stop">
+        <img class="route-step-fourteen-photo" src="assets/route-page-15-photo.jpg" alt="A covered sidewalk with a bus stop beside the road as a family walks along it." />
+        <img class="route-step-fourteen-momo" src="assets/momo-route-step-14.png" alt="Momo points toward the bus stop." />
+        <p class="route-instruction-fourteen">You will&nbsp;<strong>pass by</strong>&nbsp;a&nbsp;<strong>bus stop</strong></p>
+      </section>
+      <section class="slide route-step-fifteen" aria-label="Step 15: Continue walking straight until you see Bibik Violet">
+        <img class="route-step-fifteen-photo" src="assets/route-page-16-photo.jpg" alt="A covered walkway with the Temasek Shophouse D and Bibik Violet signs." />
+        <img class="route-step-fifteen-momo" src="assets/momo-route-step-15.png" alt="Momo points toward the Bibik Violet sign." />
+        <p class="route-instruction-fifteen"><span><strong>Continue</strong>&nbsp;walking&nbsp;<strong>straight</strong></span><span>until you see&nbsp;<strong>“Bibik Violet”</strong></span></p>
+      </section>
+      <section class="slide route-step-sixteen" aria-label="Step 16: Go in, you have arrived at the exhibition venue">
+        <img class="route-step-sixteen-photo" src="assets/route-page-17-photo.jpg" alt="The entrance to Temasek Shophouse, with the family arriving at the doors." />
+        <img class="route-step-sixteen-momo" src="assets/momo-route-step-16.png" alt="Momo celebrates at the exhibition venue entrance." />
+        <p class="route-instruction-sixteen"><span><strong>Go in</strong>, you have <strong>arrived</strong></span><span>at the <strong>exhibition venue!</strong></span></p>
+      </section>
+      <section class="slide route-slide celebration" aria-label="Congratulations. You have reached the exhibition. Enjoy the exhibition!">
+        <div class="celebration-confetti" aria-hidden="true">
+          <i class="confetti-piece" style="--x:4%;--size:8px;--color:#ffd500;--duration:5.2s;--delay:-2.7s;--drift:32px;--turn:460deg"></i>
+          <i class="confetti-piece" style="--x:10%;--size:6px;--color:#00c9ff;--duration:4.6s;--delay:-1.2s;--drift:-24px;--turn:330deg"></i>
+          <i class="confetti-piece" style="--x:16%;--size:10px;--color:#f36fbd;--duration:5.8s;--delay:-4.1s;--drift:26px;--turn:520deg"></i>
+          <i class="confetti-piece" style="--x:22%;--size:7px;--color:#26bd8c;--duration:4.9s;--delay:-3.3s;--drift:-30px;--turn:400deg"></i>
+          <i class="confetti-piece" style="--x:28%;--size:9px;--color:#ffd500;--duration:5.5s;--delay:-.8s;--drift:21px;--turn:360deg"></i>
+          <i class="confetti-piece" style="--x:34%;--size:6px;--color:#8f69d4;--duration:4.4s;--delay:-2.2s;--drift:-25px;--turn:490deg"></i>
+          <i class="confetti-piece" style="--x:40%;--size:8px;--color:#00c9ff;--duration:5.7s;--delay:-3.8s;--drift:34px;--turn:420deg"></i>
+          <i class="confetti-piece" style="--x:46%;--size:10px;--color:#f36fbd;--duration:4.8s;--delay:-1.6s;--drift:-22px;--turn:540deg"></i>
+          <i class="confetti-piece" style="--x:52%;--size:7px;--color:#ffd500;--duration:5.1s;--delay:-4.6s;--drift:28px;--turn:380deg"></i>
+          <i class="confetti-piece" style="--x:58%;--size:9px;--color:#26bd8c;--duration:4.5s;--delay:-2.9s;--drift:-34px;--turn:470deg"></i>
+          <i class="confetti-piece" style="--x:64%;--size:6px;--color:#8f69d4;--duration:5.9s;--delay:-.5s;--drift:24px;--turn:350deg"></i>
+          <i class="confetti-piece" style="--x:70%;--size:8px;--color:#00c9ff;--duration:4.7s;--delay:-3.6s;--drift:-26px;--turn:520deg"></i>
+          <i class="confetti-piece" style="--x:76%;--size:10px;--color:#f36fbd;--duration:5.4s;--delay:-2.4s;--drift:31px;--turn:410deg"></i>
+          <i class="confetti-piece" style="--x:82%;--size:7px;--color:#ffd500;--duration:4.3s;--delay:-4.4s;--drift:-20px;--turn:500deg"></i>
+          <i class="confetti-piece" style="--x:88%;--size:9px;--color:#26bd8c;--duration:5.6s;--delay:-1.9s;--drift:35px;--turn:390deg"></i>
+          <i class="confetti-piece" style="--x:95%;--size:6px;--color:#8f69d4;--duration:4.8s;--delay:-3.1s;--drift:-29px;--turn:450deg"></i>
+        </div>
+        <div class="celebration-content">
+          <h1>Good Job! You have reached!</h1>
+          <p>Enjoy the exhibition!</p>
+          <img class="celebration-momo" src="assets/momo-route-step-16.png" alt="Happy Momo celebrating with closed, smiling eyes" />
+        </div>
+      </section>
       <nav class="controls" aria-label="Story controls">
         <button class="control" id="back" type="button" aria-label="Previous page" disabled>
           <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M19 12H6m5 6-6-6 6-6" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Back</span>
@@ -253,12 +520,18 @@
         const next = document.getElementById("next");
         const startRouteButton = document.getElementById("startRouteButton");
         const home = document.getElementById("home");
+        const brandScreen = document.getElementById("brandScreen");
+        const welcomeScreen = document.getElementById("welcomeScreen");
+        const welcomeStartButton = document.getElementById("welcomeStartButton");
         const pickerScreen = document.getElementById("pickerScreen");
         const routeUi = document.getElementById("routeUi");
         const shortestRoute = document.getElementById("shortestRoute");
         const counter = document.getElementById("counter");
         const announcement = document.getElementById("announcement");
         const progress = document.getElementById("progress");
+        const routeOneMomo = document.querySelector(".route-step-one-momo");
+        const routeTwoMomo = document.querySelector(".route-step-two-momo");
+        const routeThreeMomo = document.querySelector(".route-step-three-momo");
         let current = 0;
         slides.forEach((slide, index) => {
           const segment = document.createElement("i");
@@ -270,6 +543,7 @@
         const loadingFill = document.getElementById("loadingFill");
         const loadingProgress = document.querySelector('[role="progressbar"]');
         let loaded = 0;
+        let brandingLeaving = false;
         const loader = setInterval(() => {
           loaded = Math.min(100, loaded + 2);
           loadingFill.style.width = `${loaded}%`;
@@ -287,22 +561,77 @@
             slide.classList.toggle("active", active);
             slide.setAttribute("aria-hidden", String(!active));
           });
+          if (current === 1 && routeOneMomo) {
+            const movingParts = [routeOneMomo, routeOneMomo.querySelector("img")];
+            movingParts.forEach(part => { part.style.animation = "none"; });
+            void routeOneMomo.offsetWidth;
+            movingParts.forEach(part => { part.style.animation = ""; });
+          }
+          if (current === 2 && routeTwoMomo) {
+            const movingParts = [routeTwoMomo, routeTwoMomo.querySelector("img")];
+            movingParts.forEach(part => { part.style.animation = "none"; });
+            void routeTwoMomo.offsetWidth;
+            movingParts.forEach(part => { part.style.animation = ""; });
+          }
+          if (current === 3 && routeThreeMomo) {
+            routeThreeMomo.style.animation = "none";
+            void routeThreeMomo.offsetWidth;
+            routeThreeMomo.style.animation = "";
+          }
           segments.forEach((segment, i) => segment.classList.toggle("done", i <= current));
           counter.textContent = `Page ${current + 1} of ${slides.length}`;
           back.disabled = current === 0;
           next.hidden = current === 0;
           next.querySelector("span").textContent = current === slides.length - 1 ? "Start again" : "Next";
-          next.setAttribute("aria-label", current === slides.length - 1 ? "Start this story again" : current === 0 ? "Start the route" : "Next page");
+          next.setAttribute("aria-label", current === slides.length - 1 ? "Start again from New Everyday Life, By Design" : current === 0 ? "Start the route" : "Next page");
           announcement.textContent = slides[current].getAttribute("aria-label");
         }
+        function continueFromBranding() {
+          if (brandingLeaving || brandScreen.hidden || !loading.classList.contains("done")) return;
+          brandingLeaving = true;
+          brandScreen.classList.add("leaving");
+          window.setTimeout(() => {
+            brandScreen.hidden = true;
+            welcomeScreen.hidden = false;
+            document.getElementById("welcomeTitle").focus({ preventScroll:true });
+          }, 500);
+        }
+        const continueFromBrandingWhenTapped = event => {
+          if (brandScreen.contains(event.target)) continueFromBranding();
+        };
+        document.addEventListener("click", continueFromBrandingWhenTapped);
+        document.addEventListener("touchend", continueFromBrandingWhenTapped, { passive:true });
+        brandScreen.addEventListener("keydown", event => {
+          if (event.key === "Enter" || event.key === " ") {
+            event.preventDefault();
+            continueFromBranding();
+          }
+        });
         shortestRoute.addEventListener("click", () => {
           pickerScreen.hidden = true;
           routeUi.hidden = false;
           show(0);
           next.focus();
         });
+        welcomeStartButton.addEventListener("click", () => {
+          welcomeScreen.hidden = true;
+          pickerScreen.hidden = false;
+          shortestRoute.focus();
+        });
         back.addEventListener("click", () => show(current - 1));
-        next.addEventListener("click", () => show(current === slides.length - 1 ? 0 : current + 1));
+        next.addEventListener("click", () => {
+          if (current === slides.length - 1) {
+            routeUi.hidden = true;
+            pickerScreen.hidden = true;
+            welcomeScreen.hidden = true;
+            brandingLeaving = false;
+            brandScreen.classList.remove("leaving");
+            brandScreen.hidden = false;
+            brandScreen.focus({ preventScroll:true });
+            return;
+          }
+          show(current + 1);
+        });
         startRouteButton.addEventListener("click", () => show(1));
         home.addEventListener("click", () => {
           routeUi.hidden = true;
