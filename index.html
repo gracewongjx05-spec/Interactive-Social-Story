@@ -85,23 +85,42 @@
       .garden-story { position:absolute; z-index:1; inset:0; overflow:hidden; background:#111; }
       .garden-story-slide { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; }
       .garden-story-momo-wrap { position:absolute; z-index:2; left:var(--momo-x,0); top:var(--momo-y,0); width:var(--momo-w,0); height:var(--momo-h,0); transform-origin:50% 100%; pointer-events:none; }
-      .garden-story-momo { display:block; width:100%; height:100%; object-fit:contain; object-position:center bottom; filter:drop-shadow(0 2px 1px rgb(19 44 48 / 16%)); transform-origin:50% 100%; }
+      .garden-story-shadow { position:absolute; z-index:0; left:29%; bottom:2.5%; width:42%; height:5.5%; border-radius:50%; background:#163f3930; filter:blur(2px); transform-origin:center; }
+      .garden-story-momo { position:relative; z-index:1; display:block; width:100%; height:100%; object-fit:contain; object-position:center bottom; filter:drop-shadow(0 2px 1px rgb(19 44 48 / 16%)); transform-origin:50% 100%; }
       .garden-story-momo-wrap[data-fit="target"] .garden-story-momo { object-fit:fill; }
+      .garden-story-momo-wrap[data-fit="target"] .garden-story-shadow { display:none; }
       .garden-story-momo-wrap[data-overlay="false"] { display:none; }
-      .garden-story-momo-wrap[data-animation="idle"] .garden-story-momo { animation:garden-momo-idle 2.4s ease-in-out infinite; }
-      .garden-story-momo-wrap[data-animation="walk"] .garden-story-momo { animation:garden-momo-walk .8s ease-in-out infinite; }
-      .garden-story-momo-wrap[data-animation="climb"], .garden-story-momo-wrap[data-animation="climb-left"] { animation:garden-momo-climb 1s ease-in-out infinite; }
-      .garden-story-momo-wrap[data-animation="point-right"] .garden-story-momo { animation:garden-momo-point-right 1.8s ease-in-out infinite; }
-      .garden-story-momo-wrap[data-animation="point-left"] .garden-story-momo { animation:garden-momo-point-left 1.8s ease-in-out infinite; }
-      .garden-story-momo-wrap[data-animation="tap"] .garden-story-momo { animation:garden-momo-tap .9s ease-in-out infinite; }
-      .garden-story-momo-wrap[data-animation="arrival"] .garden-story-momo { animation:garden-momo-arrival 1s ease-in-out infinite; }
-      @keyframes garden-momo-walk { 0%,100% { transform:translateY(0) rotate(-2deg); } 50% { transform:translateY(-3%) rotate(2deg); } }
-      @keyframes garden-momo-idle { 0%,100% { transform:translateY(0); } 50% { transform:translateY(-1.5%); } }
-      @keyframes garden-momo-climb { 0%,100% { transform:translateY(0); } 50% { transform:translateY(-4%); } }
-      @keyframes garden-momo-point-right { 0%,100% { transform:rotate(0); } 45% { transform:rotate(4deg); } }
-      @keyframes garden-momo-point-left { 0%,100% { transform:rotate(0); } 45% { transform:rotate(-4deg); } }
-      @keyframes garden-momo-tap { 0%,100% { transform:translateY(0); } 35% { transform:translate(-3%,3%) scale(1.05,.95); } 65% { transform:translate(-3%,-5%) scale(.98,1.06); } }
-      @keyframes garden-momo-arrival { 0%,100% { transform:translateY(0) rotate(0); } 35% { transform:translateY(-8%) rotate(-3deg); } 60% { transform:translateY(0) rotate(2deg); } }
+      .garden-story-momo-wrap[data-animation="walk"] .garden-story-momo { animation:garden-grounded-walk .8s ease-in-out infinite; }
+      .garden-story-momo-wrap[data-animation="walk"] .garden-story-shadow { animation:garden-walk-shadow .8s ease-in-out infinite; }
+      .garden-story-momo-wrap[data-animation="idle"] .garden-story-momo { animation:garden-idle-grounded 2.4s ease-in-out infinite; }
+      .garden-story-momo-wrap[data-animation="idle"] .garden-story-shadow { animation:garden-idle-shadow 2.4s ease-in-out infinite; }
+      .garden-story-momo-wrap[data-animation="point-right"] .garden-story-momo { animation:garden-point-right 1.8s ease-in-out infinite; }
+      .garden-story-momo-wrap[data-animation="point-left"] .garden-story-momo { animation:garden-point-left 1.8s ease-in-out infinite; }
+      .garden-story-momo-wrap[data-animation="climb"] .garden-story-momo { animation:garden-climb-up 1s ease-in-out infinite; }
+      .garden-story-momo-wrap[data-animation="climb"] .garden-story-shadow,
+      .garden-story-momo-wrap[data-animation="climb-left"] .garden-story-shadow { animation:garden-walk-shadow 1s ease-in-out infinite; }
+      .garden-story-momo-wrap[data-animation="climb-left"] .garden-story-momo { animation:garden-climb-up-left 1s ease-in-out infinite; }
+      .garden-story-momo-wrap[data-animation="escalator-climb"] { animation:garden-escalator-path 3.2s cubic-bezier(.28,.12,.55,1) forwards; }
+      .garden-story-momo-wrap[data-animation="escalator-climb"] .garden-story-momo { animation:garden-escalator-footfalls .8s ease-in-out 4; }
+      .garden-story-momo-wrap[data-animation="escalator-climb"] .garden-story-shadow { animation:garden-escalator-shadow 3.2s ease-in-out forwards; }
+      .garden-story-momo-wrap[data-animation="tap"] .garden-story-momo { animation:garden-tap-action .5s cubic-bezier(.2,.75,.25,1) both; }
+      .garden-story-momo-wrap[data-animation="success"] .garden-story-momo { animation:garden-success-action .62s ease-out both; }
+      .garden-story-momo-wrap[data-animation="arrival"] .garden-story-momo { animation:garden-arrival-action 1s ease-in-out infinite; }
+      .garden-route-ui .garden-story-controls .garden-story-next[disabled] { visibility:visible; opacity:.68; cursor:default; }
+      @keyframes garden-grounded-walk { 0%,50%,100% { transform:translate(0,0) rotate(-.8deg) scale(1); } 25% { transform:translate(1.5%,-3.5%) rotate(1.3deg) scale(.985,1.025); } 75% { transform:translate(-1.5%,-3.5%) rotate(-1.3deg) scale(.985,1.025); } }
+      @keyframes garden-walk-shadow { 0%,50%,100% { transform:scaleX(1); opacity:.52; } 25%,75% { transform:scaleX(.78); opacity:.31; } }
+      @keyframes garden-idle-grounded { 0%,100% { transform:scale(1); } 50% { transform:scale(1.008,.992); } }
+      @keyframes garden-idle-shadow { 0%,100% { transform:scaleX(1); opacity:.44; } 50% { transform:scaleX(1.02); opacity:.4; } }
+      @keyframes garden-point-right { 0%,100% { transform:translateX(0) rotate(0) scaleX(-1); } 38% { transform:translateX(-1.2%) rotate(1.5deg) scaleX(-1.015); } 72% { transform:translateX(-.6%) rotate(.5deg) scaleX(-1.005); } }
+      @keyframes garden-point-left { 0%,100% { transform:translateX(0) rotate(0) scale(1); } 38% { transform:translateX(1.2%) rotate(-1.5deg) scale(1.015); } 72% { transform:translateX(.6%) rotate(-.5deg) scale(1.005); } }
+      @keyframes garden-climb-up { 0%,100% { transform:translateY(0) rotate(0) scale(-1,.99); } 32% { transform:translateY(-3.5%) rotate(2.5deg) scale(-.985,1.025); } 64% { transform:translateY(-1%) rotate(1deg) scale(-1.01,.99); } }
+      @keyframes garden-climb-up-left { 0%,100% { transform:translateY(0) rotate(0) scale(1,.99); } 32% { transform:translateY(-3.5%) rotate(-2.5deg) scale(.985,1.025); } 64% { transform:translateY(-1%) rotate(-1deg) scale(1.01,.99); } }
+      @keyframes garden-escalator-path { 0% { transform:translate(0,0); } 25% { transform:translate(8%,-5%); } 50% { transform:translate(18%,-12%); } 75% { transform:translate(32%,-19%); } 100% { transform:translate(45%,-25%); } }
+      @keyframes garden-escalator-footfalls { 0%,100% { transform:translateY(0) rotate(0) scale(1,.99); } 35% { transform:translateY(-2%) rotate(1deg) scale(1.015,1.01); } 70% { transform:translateY(0) rotate(-.5deg) scale(.99,1.015); } }
+      @keyframes garden-escalator-shadow { 0%,100% { transform:scaleX(1); opacity:.44; } 100% { transform:scaleX(.78); opacity:.28; } }
+      @keyframes garden-tap-action { 0% { transform:translate(0,0) rotate(0) scale(1); } 55% { transform:translate(-5%,-1%) rotate(-3deg) scale(1.04); } 100% { transform:translate(-3%,0) rotate(-1deg) scale(1.02); } }
+      @keyframes garden-success-action { 0% { transform:translate(-3%,0) scale(1.02); } 30% { transform:translate(-3%,1%) scale(1.07,.94); } 60% { transform:translate(-3%,-5%) scale(.98,1.06); } 100% { transform:translate(0,0) scale(1); } }
+      @keyframes garden-arrival-action { 0%,100% { transform:rotate(0); } 25% { transform:rotate(-3deg); } 55% { transform:rotate(3deg); } 78% { transform:rotate(-2deg); } }
       .garden-story-controls { z-index:6; }
       .garden-route-ui .garden-story-controls .control { width:var(--square-control-size); height:var(--square-control-size); aspect-ratio:1; min-width:var(--square-control-size); min-height:var(--square-control-size); padding:0; gap:0; border:clamp(2px,.2cqw,3px) solid var(--blue); border-radius:clamp(10px,1cqw,15px); background:#00e6b8; color:#101828; box-shadow:0 clamp(2px,.27cqw,4px) 0 #00a98a; font-size:0; }
       .garden-route-ui .garden-story-controls .control:hover { background:#21efc6; }
@@ -485,6 +504,7 @@
         <section class="garden-story" id="gardenStory" aria-label="Garden Route story" hidden>
           <img class="garden-story-slide" id="gardenStorySlide" src="assets/garden--2-clean.png" alt="">
           <div class="garden-story-momo-wrap" id="gardenStoryMomoWrap" data-fit="contain" data-overlay="true">
+            <div class="garden-story-shadow" aria-hidden="true"></div>
             <img class="garden-story-momo" id="gardenStoryMomo" src="assets/momo-idle.svg" alt="">
           </div>
           <nav class="garden-story-controls controls" aria-label="Garden Route story controls">
@@ -671,12 +691,13 @@
           { page:"25", file:"garden-25-clean.png", instruction:"You have arrived at the exhibition venue", momoBox:{x:572,y:203,w:130,h:156}, momoAsset:"momo-page25-figma.png", momoSource:{w:864,h:885,x:129,y:83,bw:608,bh:741}, overlay:true }
         ];
         function gardenMotion(step) {
-          if (step.momoAnimation === "escalator") return "climb";
+          if (step.momoAnimation === "escalator") return "escalator-climb";
           const text = step.instruction || "";
           if (/\barriv(?:e|ed|al)\b/i.test(text)) return "arrival";
           if (/\btap\b.*\bcard\b|\bcard\b.*\btap\b/i.test(text)) return "tap";
           if (/\blift\b.*\bup\b|\bup\b.*\blift\b/i.test(text)) return "climb-left";
           if (/\b(?:go|head|move|take|ride|walk)\s+up\b|\bup\s+(?:the\s+)?(?:escalator|stairs?)\b|\b(?:escalator|stairs?)\b.*\bup\b/i.test(text)) return "climb";
+          if (/\bturn\s+right\b.*\bgantry\b|\bgantry\b.*\bturn\s+right\b/i.test(text)) return "point-left";
           if (/\bturn\s+left\b/i.test(text)) return "point-left";
           if (/\bturn\s+right\b|\bright\b|\bpoint(?:ing)?\b|\bsignboard\b|\bdirections?\b/i.test(text)) return "point-right";
           if (/\b(?:look\s+out|watch\s+for|wait|stop)\b|\btraffic\b|\bvehicles?\b/i.test(text)) return "idle";
@@ -685,6 +706,9 @@
         }
         let gardenCurrentPage = 0;
         let gardenSegments = [];
+        let gardenTapTimer = 0;
+        let gardenTapSuccessTimer = 0;
+        let gardenTapEnableTimer = 0;
         const shortestRoute = document.getElementById("shortestRoute");
         const counter = document.getElementById("counter");
         const announcement = document.getElementById("announcement");
@@ -753,6 +777,9 @@
           announcement.textContent = slides[current].getAttribute("aria-label");
         }
         function renderGardenPage() {
+          window.clearTimeout(gardenTapTimer);
+          window.clearTimeout(gardenTapSuccessTimer);
+          window.clearTimeout(gardenTapEnableTimer);
           gardenSegments.forEach((segment, index) => segment.classList.toggle("done", index <= gardenCurrentPage));
           gardenCounter.textContent = `Page ${gardenCurrentPage + 1} of ${gardenSteps.length + 1}`;
           gardenIntro.hidden = gardenCurrentPage !== 0;
@@ -770,6 +797,16 @@
           gardenStoryMomoWrap.dataset.animation = gardenMotion(step);
           gardenStoryMomoWrap.dataset.fit = step.momoBox ? "target" : "contain";
           gardenStoryMomoWrap.style.transform = step.flipX ? "scaleX(-1)" : "";
+          gardenStoryNext.disabled = Boolean(step.requiresTap);
+          if (step.requiresTap) {
+            gardenTapTimer = window.setTimeout(() => {
+              gardenStoryMomoWrap.dataset.animation = "tap";
+              gardenTapSuccessTimer = window.setTimeout(() => {
+                gardenStoryMomoWrap.dataset.animation = "success";
+                gardenTapEnableTimer = window.setTimeout(() => { gardenStoryNext.disabled = false; }, 620);
+              }, 500);
+            }, 280);
+          }
 
           if (step.momoBox) {
             const target = step.momoBox;
