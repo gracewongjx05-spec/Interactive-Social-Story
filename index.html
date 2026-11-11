@@ -852,13 +852,7 @@
           }
         });
         gardenRoute.addEventListener("click", () => {
-          pickerScreen.hidden = true;
-          routeUi.hidden = true;
-          gardenRouteUi.hidden = false;
-          gardenRouteNotice.hidden = true;
-          gardenCurrentPage = 0;
-          renderGardenPage();
-          gardenStartButton.focus();
+          window.location.assign("garden/?route=garden");
         });
         gardenStartButton.addEventListener("click", () => {
           gardenCurrentPage = 1;
@@ -899,6 +893,13 @@
         function showRoutePicker() {
           pickerScreen.hidden = false;
           shortestRoute.focus();
+        }
+        if (window.location.hash === "#routes") {
+          clearInterval(loader);
+          loading.classList.add("done");
+          document.querySelector(".book").setAttribute("aria-busy", "false");
+          brandScreen.hidden = true;
+          showRoutePicker();
         }
         back.addEventListener("click", () => show(current - 1));
         next.addEventListener("click", () => {
