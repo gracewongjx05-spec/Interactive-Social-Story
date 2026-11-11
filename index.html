@@ -696,11 +696,6 @@
           progress.append(segment);
         });
         const segments = [...progress.children];
-        for (let index = 0; index < 22; index++) {
-          const segment = document.createElement("i");
-          if (index === 0) segment.classList.add("done");
-          gardenIntroProgress.append(segment);
-        }
         const loading = document.getElementById("loading");
         const loadingFill = document.getElementById("loadingFill");
         const loadingProgress = document.querySelector('[role="progressbar"]');
