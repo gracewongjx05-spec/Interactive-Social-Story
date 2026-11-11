@@ -73,17 +73,51 @@
     .garden-intro-copy p { margin: 1.5cqw 0; font-size: clamp(12px, 2.2cqw, 23px); color: #475467; }
     .garden-intro-copy .garden-intro-label { color: #062679; font-weight: 700; text-transform: uppercase; }
     .garden-intro-start {
+      width: min(100%, 350px);
+      min-height: clamp(56px, 4.6cqw, 70px);
       align-self: flex-start;
-      margin-top: 1cqw;
-      padding: .65em 1em;
-      border: 2px solid #062679;
-      border-radius: 12px;
-      background: #00c9ff;
-      color: #111;
-      font-size: clamp(12px, 2cqw, 22px);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      margin-top: clamp(18px, 2cqw, 30px);
+      padding: 10px 20px;
+      border: 3px solid #00c9ff;
+      border-radius: 18px;
+      background: #00e6b8;
+      color: #101828;
+      box-shadow: 0 4px 0 #00a98a;
+      font-size: clamp(16px, 1.5cqw, 22px);
       font-weight: 700;
       cursor: pointer;
+      touch-action: manipulation;
+      transition: background .14s ease, transform .14s ease, box-shadow .14s ease;
     }
+    .garden-intro-start:hover { background: #21efc6; }
+    .garden-intro-start:active { transform: translateY(3px); box-shadow: 0 1px 0 #00a98a; }
+    .garden-intro-start:focus-visible { outline: 4px solid #062679; outline-offset: 4px; }
+    .garden-intro-home {
+      position: absolute;
+      z-index: 8;
+      top: max(17px, env(safe-area-inset-top));
+      right: max(18px, env(safe-area-inset-right));
+      width: clamp(46px, 4.6cqw, 68px);
+      height: clamp(46px, 4.6cqw, 68px);
+      display: grid;
+      place-items: center;
+      padding: 0;
+      border: 3px solid #00c9ff;
+      border-radius: 14px;
+      background: #00e6b8;
+      color: #101828;
+      box-shadow: 0 4px 0 #00a98a;
+      cursor: pointer;
+    }
+    .garden-intro-home svg { width: 42%; height: 42%; fill: currentColor; }
+    .garden-intro-home:hover { background: #21efc6; }
+    .garden-intro-home:active { transform: translateY(3px); box-shadow: 0 1px 0 #00a98a; }
+    .garden-intro-home:focus-visible { outline: 4px solid #fff; outline-offset: 3px; }
+    .garden-intro-counter { bottom: clamp(5px, .81cqw, 12px); }
 
     .loading-screen {
       background:
@@ -745,6 +779,10 @@
 <body>
   <main class="frame" id="frame" data-view="loading" data-motion="idle" aria-label="MOMO wayfinding social story">
     <section class="entry garden-intro" aria-labelledby="gardenIntroTitle">
+      <span class="counter garden-intro-counter" id="gardenIntroCounter" aria-hidden="true">Page 1 of 22</span>
+      <button class="garden-intro-home" id="gardenIntroHome" type="button" aria-label="Return to route selection">
+        <svg class="nav-icon home-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.7 1.7 10.9l1.2 1.5L5 10.7V21h5.3v-6h3.4v6H19V10.7l2.1 1.7 1.2-1.5L12 2.7Z"/></svg>
+      </button>
       <div class="garden-intro-layout">
         <div class="garden-intro-art">
           <img src="assets/momo-page25-figma.png" alt="Momo smiling with eyes closed and holding a flower">
@@ -1021,6 +1059,7 @@
       status.textContent = "Card tap complete";
     }
 
+    document.querySelector("#gardenIntroHome").addEventListener("click", showRoutes);
     document.querySelector("#gardenStart").addEventListener("click", () => openStory("garden"));
     document.querySelector("#completionHome").addEventListener("click", showRoutes);
     document.querySelector("#home").addEventListener("click", showRoutes);
