@@ -12,7 +12,7 @@
       html,body { margin:0; min-height:100%; background:#101a2b; }
       body { min-height:100dvh; }
       button { font:inherit; }
-      .book { position:relative; width:min(calc(100vw - 24px),calc((100dvh - 24px) * 1.77778)); height:min(calc(100dvh - 24px),calc((100vw - 24px) / 1.77778)); aspect-ratio:16 / 9; max-height:calc(100dvh - 24px); overflow:hidden; border:7px solid #101a2b; border-radius:30px; background:#101a2b; isolation:isolate; container-type:size; box-shadow:0 20px 80px rgb(0 0 0 / 30%); }
+      .book { --square-control-size:clamp(46px,4.6cqw,68px); position:relative; width:min(calc(100vw - 24px),calc((100dvh - 24px) * 1.77778)); height:min(calc(100dvh - 24px),calc((100vw - 24px) / 1.77778)); aspect-ratio:16 / 9; max-height:calc(100dvh - 24px); overflow:hidden; border:7px solid #101a2b; border-radius:30px; background:#101a2b; isolation:isolate; container-type:size; box-shadow:0 20px 80px rgb(0 0 0 / 30%); }
       .loading { position:absolute; z-index:20; inset:0; display:flex; flex-direction:column; justify-content:center; align-items:center; gap:clamp(10px,2.5vh,18px); padding:24px; background:#fff; transition:opacity .35s ease,visibility .35s ease; }
       .loading.done { opacity:0; visibility:hidden; pointer-events:none; }
       .walk-stage { position:relative; width:min(68%,520px); height:52%; flex:none; display:flex; align-items:flex-end; justify-content:center; }
@@ -74,16 +74,40 @@
       .intro h1 { margin:0; color:#111; font-size:clamp(25px,5.2vh,46px); line-height:1.15; }
       .intro p { margin:12px 0 0; color:#475467; font-size:clamp(16px,2.7vh,23px); line-height:1.35; }
       .start-route-button { width:min(100%,280px); min-height:56px; margin-top:clamp(18px,3.5vh,30px); align-self:flex-start; }
-      .garden-intro-screen[hidden] { display:none !important; }
-      .garden-intro-screen { position:absolute; z-index:4; inset:0; overflow:hidden; background:#fff; }
-      .garden-intro-screen .garden-intro-start { background:#00e6b8; box-shadow:0 4px 0 #00a98a; }
-      .garden-intro-screen .garden-intro-start:hover { background:#21efc6; }
-      .garden-intro-screen .garden-intro-start:active { box-shadow:0 1px 0 #00a98a; }
-      .garden-intro-screen .progress i { box-shadow:0 1px 3px rgb(0 166 136 / 24%); }
-      .garden-intro-screen .progress i.done { background:#00e6b8; box-shadow:0 1px 4px rgb(0 166 136 / 38%); }
-      .garden-intro-screen .garden-intro-home { background:#00e6b8; box-shadow:0 4px 0 #00a98a; }
-      .garden-intro-screen .garden-intro-home:hover { background:#21efc6; }
-      .garden-intro-screen .garden-intro-home:active { transform:translateY(3px); box-shadow:0 1px 0 #00a98a; }
+      .garden-route-ui[hidden] { display:none !important; }
+      .garden-route-ui { position:absolute; z-index:2; inset:0; overflow:hidden; background:#fff; }
+      .garden-intro { position:absolute; inset:0; }
+      .garden-start-route-button { background:#00e6b8; box-shadow:0 4px 0 #00a98a; }
+      .garden-start-route-button:hover { background:#21efc6; }
+      .garden-start-route-button:active { box-shadow:0 1px 0 #00a98a; }
+      .garden-route-notice { margin-top:12px !important; color:#475467; font-size:clamp(13px,2vh,17px) !important; }
+      .garden-intro[hidden], .garden-story[hidden] { display:none !important; }
+      .garden-story { position:absolute; z-index:1; inset:0; overflow:hidden; background:#111; }
+      .garden-story-slide { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; }
+      .garden-story-momo-wrap { position:absolute; z-index:2; left:var(--momo-x,0); top:var(--momo-y,0); width:var(--momo-w,0); height:var(--momo-h,0); transform-origin:50% 100%; pointer-events:none; }
+      .garden-story-momo { display:block; width:100%; height:100%; object-fit:contain; object-position:center bottom; filter:drop-shadow(0 2px 1px rgb(19 44 48 / 16%)); transform-origin:50% 100%; }
+      .garden-story-momo-wrap[data-fit="target"] .garden-story-momo { object-fit:fill; }
+      .garden-story-momo-wrap[data-overlay="false"] { display:none; }
+      .garden-story-momo-wrap[data-animation="idle"] .garden-story-momo { animation:garden-momo-idle 2.4s ease-in-out infinite; }
+      .garden-story-momo-wrap[data-animation="walk"] .garden-story-momo { animation:garden-momo-walk .8s ease-in-out infinite; }
+      .garden-story-momo-wrap[data-animation="climb"], .garden-story-momo-wrap[data-animation="climb-left"] { animation:garden-momo-climb 1s ease-in-out infinite; }
+      .garden-story-momo-wrap[data-animation="point-right"] .garden-story-momo { animation:garden-momo-point-right 1.8s ease-in-out infinite; }
+      .garden-story-momo-wrap[data-animation="point-left"] .garden-story-momo { animation:garden-momo-point-left 1.8s ease-in-out infinite; }
+      .garden-story-momo-wrap[data-animation="tap"] .garden-story-momo { animation:garden-momo-tap .9s ease-in-out infinite; }
+      .garden-story-momo-wrap[data-animation="arrival"] .garden-story-momo { animation:garden-momo-arrival 1s ease-in-out infinite; }
+      @keyframes garden-momo-walk { 0%,100% { transform:translateY(0) rotate(-2deg); } 50% { transform:translateY(-3%) rotate(2deg); } }
+      @keyframes garden-momo-idle { 0%,100% { transform:translateY(0); } 50% { transform:translateY(-1.5%); } }
+      @keyframes garden-momo-climb { 0%,100% { transform:translateY(0); } 50% { transform:translateY(-4%); } }
+      @keyframes garden-momo-point-right { 0%,100% { transform:rotate(0); } 45% { transform:rotate(4deg); } }
+      @keyframes garden-momo-point-left { 0%,100% { transform:rotate(0); } 45% { transform:rotate(-4deg); } }
+      @keyframes garden-momo-tap { 0%,100% { transform:translateY(0); } 35% { transform:translate(-3%,3%) scale(1.05,.95); } 65% { transform:translate(-3%,-5%) scale(.98,1.06); } }
+      @keyframes garden-momo-arrival { 0%,100% { transform:translateY(0) rotate(0); } 35% { transform:translateY(-8%) rotate(-3deg); } 60% { transform:translateY(0) rotate(2deg); } }
+      .garden-story-controls { z-index:6; }
+      .garden-route-ui .garden-story-controls .control { width:var(--square-control-size); height:var(--square-control-size); aspect-ratio:1; min-width:var(--square-control-size); min-height:var(--square-control-size); padding:0; gap:0; border:clamp(2px,.2cqw,3px) solid var(--blue); border-radius:clamp(10px,1cqw,15px); background:#00e6b8; color:#101828; box-shadow:0 clamp(2px,.27cqw,4px) 0 #00a98a; font-size:0; }
+      .garden-route-ui .garden-story-controls .control:hover { background:#21efc6; }
+      .garden-route-ui .garden-story-controls .control:active { box-shadow:0 1px 0 #00a98a; }
+      .garden-route-ui .garden-story-controls .control svg { width:68%; height:68%; }
+      .garden-route-ui .garden-home-control { z-index:8; }
       .picker-screen { position:absolute; z-index:3; inset:0; display:flex; flex-direction:column; align-items:center; padding:clamp(18px,5%,34px) 24px 18px; background:#fff; }
       .picker-title { margin:0; text-align:center; color:#080808; font-size:clamp(20px,4.4vh,27px); line-height:1.2; font-weight:700; }
       .route-options { width:100%; flex:1; min-height:0; display:flex; align-items:center; justify-content:center; gap:clamp(36px,13vw,112px); padding-top:8px; }
@@ -107,7 +131,7 @@
       .shortest-card:hover { transform:translateY(-3px); box-shadow:0 7px 0 rgb(6 38 121 / 14%); }
       .shortest-card:active { transform:translateY(2px); box-shadow:none; }
       .shortest-card:focus-visible { outline:4px solid var(--navy); outline-offset:4px; }
-      .route-ui .controls .control { width:clamp(46px,4.6cqw,68px); min-width:clamp(46px,4.6cqw,68px); height:clamp(46px,4.6cqw,68px); min-height:clamp(46px,4.6cqw,68px); padding:0; gap:0; }
+      .route-ui .controls .control { width:var(--square-control-size); min-width:var(--square-control-size); height:var(--square-control-size); min-height:var(--square-control-size); padding:0; gap:0; }
       .route-ui .controls .control svg { width:68%; height:68%; }
       .route-ui .controls .control span { display:none; }
       .route-ui[hidden], .picker-screen[hidden] { display:none !important; }
@@ -314,7 +338,7 @@
       #next[hidden] { display:none !important; }
       .control svg { width:22px; height:22px; }
       .counter { position:absolute; z-index:5; pointer-events:none; left:50%; bottom:12px; transform:translateX(-50%); padding:8px 12px; border-radius:99px; color:#fff; background:rgb(6 38 121 / 90%); font-size:14px; font-weight:800; text-shadow:0 1px 2px #000; white-space:nowrap; }
-      .home-control { position:absolute; z-index:6; top:max(17px,env(safe-area-inset-top)); right:max(18px,env(safe-area-inset-right)); width:54px; height:54px; display:grid; place-items:center; border:3px solid var(--blue); border-radius:14px; background:var(--yellow); box-shadow:0 4px 0 #d2b000; color:#101828; cursor:pointer; }
+      .home-control { position:absolute; z-index:6; top:max(17px,env(safe-area-inset-top)); right:max(18px,env(safe-area-inset-right)); width:var(--square-control-size); height:var(--square-control-size); display:grid; place-items:center; border:3px solid var(--blue); border-radius:14px; background:var(--yellow); box-shadow:0 4px 0 #d2b000; color:#101828; cursor:pointer; }
       .home-control svg { width:27px; height:27px; }
       .home-control:focus-visible { outline:4px solid #fff; outline-offset:3px; }
       .progress { position:absolute; z-index:4; top:max(10px,env(safe-area-inset-top)); left:16px; right:82px; height:7px; display:flex; gap:4px; pointer-events:none; }
@@ -365,8 +389,8 @@
         .home-control {
           top:max(clamp(8px,1.15cqw,17px),env(safe-area-inset-top));
           right:max(clamp(8px,1.22cqw,18px),env(safe-area-inset-right));
-          width:clamp(34px,3.65cqw,54px);
-          height:clamp(34px,3.65cqw,54px);
+          width:var(--square-control-size);
+          height:var(--square-control-size);
           border-width:clamp(2px,.2cqw,3px);
           border-radius:clamp(8px,.95cqw,14px);
           box-shadow:0 clamp(2px,.27cqw,4px) 0 #d2b000;
@@ -437,19 +461,30 @@
           </button>
         </div>
       </section>
-      <section class="garden-intro-screen" id="gardenIntroScreen" aria-label="Garden Route introduction" hidden>
-        <div class="progress" id="gardenIntroProgress" aria-hidden="true"></div>
-        <div class="intro">
+      <section class="garden-route-ui" id="gardenRouteUi" aria-label="Garden route introduction" hidden>
+        <div class="progress" id="gardenProgress" aria-hidden="true"></div>
+        <div class="intro garden-intro">
           <div class="intro-art"><img src="assets/garden-route.png" alt="Momo holding a flower" /></div>
           <div class="intro-copy">
             <p class="eyebrow">Garden route</p>
             <h1>Lesser people, calmer route.</h1>
             <p>Let’s take a walk through the garden! Follow the pictures to the exhibition venue.</p>
-            <button class="control start-route-button garden-intro-start" id="gardenIntroStart" type="button">Let’s Start! <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h13m-5-6 6 6-6 6" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+            <button class="control start-route-button garden-start-route-button" id="gardenStartButton" type="button">Let’s Start! <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h13m-5-6 6 6-6 6" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+            <p class="garden-route-notice" id="gardenRouteNotice" role="status" hidden>Garden route pages are coming soon.</p>
           </div>
         </div>
-        <div class="counter" id="gardenIntroCounter" aria-live="polite">Page 1 of 22</div>
-        <button class="home-control garden-intro-home" id="gardenIntroHome" type="button" aria-label="Choose a route" title="Choose a route"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m3.5 10.2 8.5-7 8.5 7v10.3a1 1 0 0 1-1 1h-5.2v-7h-4.6v7H4.5a1 1 0 0 1-1-1V10.2Z" fill="currentColor" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg></button>
+        <section class="garden-story" id="gardenStory" aria-label="Garden Route story" hidden>
+          <img class="garden-story-slide" id="gardenStorySlide" src="assets/garden--2-clean.png" alt="">
+          <div class="garden-story-momo-wrap" id="gardenStoryMomoWrap" data-fit="contain" data-overlay="true">
+            <img class="garden-story-momo" id="gardenStoryMomo" src="assets/momo-idle.svg" alt="">
+          </div>
+          <nav class="garden-story-controls controls" aria-label="Garden Route story controls">
+            <button class="control garden-story-back" id="gardenStoryBack" type="button" aria-label="Previous page"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M19 12H5m7 7-7-7 7-7" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+            <button class="control garden-story-next" id="gardenStoryNext" type="button" aria-label="Next page"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h14m-7-7 7 7-7 7" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+          </nav>
+        </section>
+        <div class="counter" id="gardenCounter" aria-live="polite">Page 1 of 17</div>
+        <button class="home-control garden-home-control" id="gardenHome" type="button" aria-label="Choose a route" title="Choose a route"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m3.5 10.2 8.5-7 8.5 7v10.3a1 1 0 0 1-1 1h-5.2v-7h-4.6v7H4.5a1 1 0 0 1-1-1V10.2Z" fill="currentColor" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg></button>
       </section>
       <div class="route-ui" id="routeUi" hidden>
       <div class="progress" id="progress" aria-hidden="true"></div>
@@ -588,15 +623,69 @@
         const brandScreen = document.getElementById("brandScreen");
         const pickerScreen = document.getElementById("pickerScreen");
         const routeUi = document.getElementById("routeUi");
+        const gardenRouteUi = document.getElementById("gardenRouteUi");
         const gardenRoute = document.getElementById("gardenRoute");
-        const gardenIntroScreen = document.getElementById("gardenIntroScreen");
-        const gardenIntroStart = document.getElementById("gardenIntroStart");
-        const gardenIntroHome = document.getElementById("gardenIntroHome");
-        const gardenIntroProgress = document.getElementById("gardenIntroProgress");
+        const gardenStartButton = document.getElementById("gardenStartButton");
+        const gardenRouteNotice = document.getElementById("gardenRouteNotice");
+        const gardenHome = document.getElementById("gardenHome");
+        const gardenProgress = document.getElementById("gardenProgress");
+        const gardenCounter = document.getElementById("gardenCounter");
+        const gardenIntro = gardenRouteUi.querySelector(".garden-intro");
+        const gardenStory = document.getElementById("gardenStory");
+        const gardenStorySlide = document.getElementById("gardenStorySlide");
+        const gardenStoryMomo = document.getElementById("gardenStoryMomo");
+        const gardenStoryMomoWrap = document.getElementById("gardenStoryMomoWrap");
+        const gardenStoryBack = document.getElementById("gardenStoryBack");
+        const gardenStoryNext = document.getElementById("gardenStoryNext");
+        const gardenMomoDefaultSource = { w:238, h:285, x:37, y:86, bw:176, bh:150 };
+        const gardenSteps = [
+          { page:"-2", file:"garden--2-clean.png", instruction:"From the star, walk to the escalator", x:57.5, y:9.7, w:24.9, h:64.6, overlay:true },
+          { page:"-1", file:"garden--1.png", instruction:"Go up the escalator", momoBox:{x:137,y:220,w:149,h:145}, momoAsset:"momo-escalator-figma.png", momoSource:{w:804,h:885,x:80,y:136,bw:694,bh:638}, momoAnimation:"escalator", overlay:true },
+          { page:"0", file:"garden-0.png", instruction:"Turn right to the gantry", x:68, y:36, w:17, h:59, overlay:true },
+          { page:"1", file:"garden-1.png", instruction:"Tap card to exit", x:60, y:34, w:19, h:62, overlay:true, requiresTap:true },
+          { page:"2", file:"garden-2.png", instruction:"Look for the way out signboard", momoBox:{x:265,y:236,w:84,h:84}, momoAsset:"momo-page7-figma.png", momoSource:{w:894,h:885,x:130,y:141,bw:650,bh:658}, momoAnimation:"idle", overlay:true },
+          { page:"3", file:"garden-3-clean.png", instruction:"Walk to the lift and take the lift up to Level 1", momoBox:{x:84,y:190,w:185,h:168}, momoAsset:"momo-lift-figma.png", momoSource:{w:1317,h:1194,x:0,y:0,bw:1317,bh:1194}, overlay:true },
+          { page:"5", file:"garden-5-clean.png", instruction:"Exit the lift and turn left to the zebra crossing", momoBox:{x:178,y:191,w:134,h:107}, overlay:true },
+          { page:"7", file:"garden-7-clean.png", instruction:"You should see the zebra crossing", momoBox:{x:128,y:231,w:127,h:130}, momoAsset:"momo-page7-figma.png", momoSource:{w:894,h:885,x:130,y:141,bw:650,bh:658}, overlay:true },
+          { page:"8", file:"garden-8-clean.png", instruction:"Look out for vehicles before crossing", momoBox:{x:246,y:185,w:96,h:76}, overlay:true },
+          { page:"9", file:"garden-9-clean.png", instruction:"Walk past the vending machine", momoBox:{x:602,y:192,w:126,h:115}, momoAsset:"momo-page9-figma.png", momoSource:{w:734,h:886,x:107,y:195,bw:570,bh:542}, flipX:true, overlay:true },
+          { page:"10", file:"garden-10-clean.png", instruction:"You should see Oldham Lane", momoBox:{x:580,y:206,w:98,h:112}, momoAsset:"momo-page10-figma.png", momoSource:{w:767,h:886,x:73,y:65,bw:658,bh:758}, overlay:true },
+          { page:"11", file:"garden-11-clean.png", instruction:"Look out for traffic before crossing", overlay:false },
+          { page:"12", file:"garden-12-clean.png", instruction:"Carefully cross the road", momoBox:{x:423,y:155,w:107,h:103}, momoAsset:"momo-page12-figma.png", momoSource:{w:734,h:886,x:107,y:195,bw:569,bh:541}, flipX:true, overlay:true },
+          { page:"13", file:"garden-13-clean.png", instruction:"Follow the pavement", momoBox:{x:633,y:215,w:132,h:104}, overlay:true },
+          { page:"16", file:"garden-16-clean.png", instruction:"Continue to follow the path", momoBox:{x:617,y:208,w:119,h:94}, overlay:true },
+          { page:"17", file:"garden-17-clean.png", instruction:"Go down the slope carefully", momoBox:{x:540,y:256,w:150,h:118}, overlay:true },
+          { page:"18", file:"garden-18-clean.png", instruction:"You should see a coloured pathway and an exit on the right", momoBox:{x:360,y:141,w:95,h:76}, overlay:true },
+          { page:"20", file:"garden-20-clean.png", instruction:"You should see a door", momoBox:{x:143,y:192,w:139,h:164}, momoAsset:"momo-page10-figma.png", momoSource:{w:767,h:886,x:73,y:65,bw:658,bh:758}, overlay:true },
+          { page:"21", file:"garden-21-clean.png", instruction:"Pull open the door", momoBox:{x:125,y:194,w:184,h:177}, momoAsset:"momo-page9-figma.png", momoSource:{w:734,h:886,x:107,y:195,bw:569,bh:541}, flipX:true, overlay:true },
+          { page:"22", file:"garden-22-clean.png", instruction:"Look for the directions to Banyan Cove", overlay:true },
+          { page:"25", file:"garden-25-clean.png", instruction:"You have arrived at the exhibition venue", momoBox:{x:572,y:203,w:130,h:156}, momoAsset:"momo-page25-figma.png", momoSource:{w:864,h:885,x:129,y:83,bw:608,bh:741}, overlay:true }
+        ];
+        function gardenMotion(step) {
+          if (step.momoAnimation === "escalator") return "climb";
+          const text = step.instruction || "";
+          if (/\barriv(?:e|ed|al)\b/i.test(text)) return "arrival";
+          if (/\btap\b.*\bcard\b|\bcard\b.*\btap\b/i.test(text)) return "tap";
+          if (/\blift\b.*\bup\b|\bup\b.*\blift\b/i.test(text)) return "climb-left";
+          if (/\b(?:go|head|move|take|ride|walk)\s+up\b|\bup\s+(?:the\s+)?(?:escalator|stairs?)\b|\b(?:escalator|stairs?)\b.*\bup\b/i.test(text)) return "climb";
+          if (/\bturn\s+left\b/i.test(text)) return "point-left";
+          if (/\bturn\s+right\b|\bright\b|\bpoint(?:ing)?\b|\bsignboard\b|\bdirections?\b/i.test(text)) return "point-right";
+          if (/\b(?:look\s+out|watch\s+for|wait|stop)\b|\btraffic\b|\bvehicles?\b/i.test(text)) return "idle";
+          if (/\bwalk\b|\bwalking\b|\bstraight\b|\bforward\b|\bfollow\b|\bpavement\b|\bcross(?:ing)?\b|\bcontinue\b/i.test(text)) return "walk";
+          return "idle";
+        }
+        let gardenCurrentPage = 0;
+        let gardenSegments = [];
         const shortestRoute = document.getElementById("shortestRoute");
         const counter = document.getElementById("counter");
         const announcement = document.getElementById("announcement");
         const progress = document.getElementById("progress");
+        for (let index = 0; index < gardenSteps.length + 1; index++) {
+          const segment = document.createElement("i");
+          if (index === 0) segment.classList.add("done");
+          gardenProgress.append(segment);
+        }
+        gardenSegments = [...gardenProgress.children];
         const routeOneMomo = document.querySelector(".route-step-one-momo");
         const routeTwoMomo = document.querySelector(".route-step-two-momo");
         const routeThreeMomo = document.querySelector(".route-step-three-momo");
@@ -659,6 +748,48 @@
           next.setAttribute("aria-label", current === slides.length - 1 ? "Start again from New Everyday Life, By Design" : current === 0 ? "Start the route" : "Next page");
           announcement.textContent = slides[current].getAttribute("aria-label");
         }
+        function renderGardenPage() {
+          gardenSegments.forEach((segment, index) => segment.classList.toggle("done", index <= gardenCurrentPage));
+          gardenCounter.textContent = `Page ${gardenCurrentPage + 1} of ${gardenSteps.length + 1}`;
+          gardenIntro.hidden = gardenCurrentPage !== 0;
+          gardenStory.hidden = gardenCurrentPage === 0;
+          gardenRouteUi.dataset.view = gardenCurrentPage === 0 ? "intro" : "story";
+          if (gardenCurrentPage === 0) return;
+
+          const step = gardenSteps[gardenCurrentPage - 1];
+          const imageWidthRatio = Math.max(1, (844 / 390) / (gardenStory.clientWidth / gardenStory.clientHeight));
+          const imageLeftRatio = (1 - imageWidthRatio) / 2;
+          gardenStorySlide.src = `assets/${step.file}`;
+          gardenStorySlide.alt = `Garden Route, step ${gardenCurrentPage} of ${gardenSteps.length}: ${step.instruction}`;
+          gardenStoryMomo.src = `assets/${step.momoAsset || "momo-idle.svg"}`;
+          gardenStoryMomoWrap.dataset.overlay = String(step.overlay !== false);
+          gardenStoryMomoWrap.dataset.animation = gardenMotion(step);
+          gardenStoryMomoWrap.dataset.fit = step.momoBox ? "target" : "contain";
+          gardenStoryMomoWrap.style.transform = step.flipX ? "scaleX(-1)" : "";
+
+          if (step.momoBox) {
+            const target = step.momoBox;
+            const source = step.momoSource || gardenMomoDefaultSource;
+            const flipX = Boolean(step.flipX);
+            const visibleSourceX = flipX ? source.w - source.x - source.bw : source.x;
+            const imageWidth = target.w * source.w / source.bw;
+            const imageHeight = target.h * source.h / source.bh;
+            const left = target.x - visibleSourceX * imageWidth / source.w;
+            const top = target.y - source.y * imageHeight / source.h;
+            gardenStoryMomoWrap.style.setProperty("--momo-x", `${(imageLeftRatio + left / 844 * imageWidthRatio) * 100}%`);
+            gardenStoryMomoWrap.style.setProperty("--momo-y", `${top / 390 * 100}%`);
+            gardenStoryMomoWrap.style.setProperty("--momo-w", `${imageWidth / 844 * imageWidthRatio * 100}%`);
+            gardenStoryMomoWrap.style.setProperty("--momo-h", `${imageHeight / 390 * 100}%`);
+          } else {
+            gardenStoryMomoWrap.style.setProperty("--momo-x", `${(imageLeftRatio + (step.x ?? 0) / 100 * imageWidthRatio) * 100}%`);
+            gardenStoryMomoWrap.style.setProperty("--momo-y", `${step.y ?? 0}%`);
+            gardenStoryMomoWrap.style.setProperty("--momo-w", `${(step.w ?? 0) * imageWidthRatio}%`);
+            gardenStoryMomoWrap.style.setProperty("--momo-h", `${step.h ?? 0}%`);
+          }
+
+          gardenStoryBack.disabled = gardenCurrentPage === 1;
+          gardenStoryNext.setAttribute("aria-label", gardenCurrentPage === gardenSteps.length ? "Finish Garden Route" : "Next Garden Route page");
+        }
         function continueFromBranding() {
           if (brandingLeaving || brandScreen.hidden || !loading.classList.contains("done")) return;
           brandingLeaving = true;
@@ -681,20 +812,45 @@
         });
         gardenRoute.addEventListener("click", () => {
           pickerScreen.hidden = true;
-          gardenIntroScreen.hidden = false;
-          gardenIntroStart.focus();
+          routeUi.hidden = true;
+          gardenRouteUi.hidden = false;
+          gardenRouteNotice.hidden = true;
+          gardenCurrentPage = 0;
+          renderGardenPage();
+          gardenStartButton.focus();
         });
-        gardenIntroHome.addEventListener("click", () => {
-          gardenIntroScreen.hidden = true;
-          showRoutePicker();
+        gardenStartButton.addEventListener("click", () => {
+          gardenCurrentPage = 1;
+          renderGardenPage();
+          gardenStoryNext.focus();
+        });
+        gardenHome.addEventListener("click", () => {
+          gardenRouteUi.hidden = true;
+          pickerScreen.hidden = false;
+          gardenCurrentPage = 0;
+          renderGardenPage();
           gardenRoute.focus();
         });
-        gardenIntroStart.addEventListener("click", () => {
-          window.location.assign("https://momo-wayfinding.vercel.app/?route=garden");
+        gardenStoryBack.addEventListener("click", () => {
+          gardenCurrentPage = Math.max(0, gardenCurrentPage - 1);
+          renderGardenPage();
+          if (gardenCurrentPage === 0) gardenStartButton.focus();
+        });
+        gardenStoryNext.addEventListener("click", () => {
+          if (gardenCurrentPage >= gardenSteps.length) {
+            gardenRouteUi.hidden = true;
+            pickerScreen.hidden = false;
+            gardenCurrentPage = 0;
+            renderGardenPage();
+            gardenRoute.focus();
+            return;
+          }
+          gardenCurrentPage++;
+          renderGardenPage();
         });
         shortestRoute.addEventListener("click", () => {
           pickerScreen.hidden = true;
-          gardenIntroScreen.hidden = true;
+          gardenRouteUi.hidden = true;
           routeUi.hidden = false;
           show(0);
           next.focus();
