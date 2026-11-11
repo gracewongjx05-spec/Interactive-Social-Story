@@ -74,6 +74,16 @@
       .intro h1 { margin:0; color:#111; font-size:clamp(25px,5.2vh,46px); line-height:1.15; }
       .intro p { margin:12px 0 0; color:#475467; font-size:clamp(16px,2.7vh,23px); line-height:1.35; }
       .start-route-button { width:min(100%,280px); min-height:56px; margin-top:clamp(18px,3.5vh,30px); align-self:flex-start; }
+      .garden-intro-screen[hidden] { display:none !important; }
+      .garden-intro-screen { position:absolute; z-index:4; inset:0; overflow:hidden; background:#fff; }
+      .garden-intro-screen .garden-intro-start { background:#00e6b8; box-shadow:0 4px 0 #00a98a; }
+      .garden-intro-screen .garden-intro-start:hover { background:#21efc6; }
+      .garden-intro-screen .garden-intro-start:active { box-shadow:0 1px 0 #00a98a; }
+      .garden-intro-screen .progress i { box-shadow:0 1px 3px rgb(0 166 136 / 24%); }
+      .garden-intro-screen .progress i.done { background:#00e6b8; box-shadow:0 1px 4px rgb(0 166 136 / 38%); }
+      .garden-intro-screen .garden-intro-home { background:#00e6b8; box-shadow:0 4px 0 #00a98a; }
+      .garden-intro-screen .garden-intro-home:hover { background:#21efc6; }
+      .garden-intro-screen .garden-intro-home:active { transform:translateY(3px); box-shadow:0 1px 0 #00a98a; }
       .picker-screen { position:absolute; z-index:3; inset:0; display:flex; flex-direction:column; align-items:center; padding:clamp(18px,5%,34px) 24px 18px; background:#fff; }
       .picker-title { margin:0; text-align:center; color:#080808; font-size:clamp(20px,4.4vh,27px); line-height:1.2; font-weight:700; }
       .route-options { width:100%; flex:1; min-height:0; display:flex; align-items:center; justify-content:center; gap:clamp(36px,13vw,112px); padding-top:8px; }
@@ -89,11 +99,17 @@
         .route-card strong { font-size:clamp(16px,5cqh,22px); }
 
       }
-      .garden-card { background:#00e6b8; text-decoration:none; }
+      .garden-card { background:#00e6b8; text-decoration:none; cursor:pointer; transition:transform .14s ease, box-shadow .14s ease; }
+      .garden-card:hover { transform:translateY(-3px); box-shadow:0 7px 0 rgb(6 38 121 / 14%); }
+      .garden-card:active { transform:translateY(2px); box-shadow:none; }
+      .garden-card:focus-visible { outline:4px solid var(--navy); outline-offset:4px; }
       .shortest-card { background:var(--yellow); cursor:pointer; transition:transform .14s ease, box-shadow .14s ease; }
       .shortest-card:hover { transform:translateY(-3px); box-shadow:0 7px 0 rgb(6 38 121 / 14%); }
       .shortest-card:active { transform:translateY(2px); box-shadow:none; }
       .shortest-card:focus-visible { outline:4px solid var(--navy); outline-offset:4px; }
+      .route-ui .controls .control { width:clamp(38px,3.78cqw,56px); min-width:clamp(38px,3.78cqw,56px); height:clamp(38px,3.78cqw,56px); min-height:clamp(38px,3.78cqw,56px); padding:0; gap:0; }
+      .route-ui .controls .control svg { width:56%; height:56%; }
+      .route-ui .controls .control span { display:none; }
       .route-ui[hidden], .picker-screen[hidden] { display:none !important; }
       .brand-screen[hidden] { display:none !important; }
       .route-step-one { background:#fff; }
@@ -415,11 +431,25 @@
       <section class="picker-screen" id="pickerScreen" aria-labelledby="pickerTitle" hidden>
         <h1 class="picker-title" id="pickerTitle">What would you like to explore today?</h1>
         <div class="route-options">
-          <a class="route-card garden-card" href="https://momo-wayfinding.vercel.app/?route=garden"><img src="assets/garden-route.png" alt="" /><strong>Garden Route</strong></a>
+          <button class="route-card garden-card" id="gardenRoute" type="button" aria-label="Open Garden Route"><img src="assets/garden-route.png" alt="" /><strong>Garden Route</strong></button>
           <button class="route-card shortest-card" id="shortestRoute" type="button" aria-label="Open Shortest Route">
             <img src="assets/momo-shortest-card.png" alt="Momo, your route guide" /><strong>Shortest Route</strong>
           </button>
         </div>
+      </section>
+      <section class="garden-intro-screen" id="gardenIntroScreen" aria-label="Garden Route introduction" hidden>
+        <div class="progress" id="gardenIntroProgress" aria-hidden="true"></div>
+        <div class="intro">
+          <div class="intro-art"><img src="assets/garden-route.png" alt="Momo holding a flower" /></div>
+          <div class="intro-copy">
+            <p class="eyebrow">Garden route</p>
+            <h1>Lesser people, calmer route.</h1>
+            <p>Let’s take a walk through the garden! Follow the pictures to the exhibition venue.</p>
+            <button class="control start-route-button garden-intro-start" id="gardenIntroStart" type="button">Let’s Start! <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h13m-5-6 6 6-6 6" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+          </div>
+        </div>
+        <div class="counter" id="gardenIntroCounter" aria-live="polite">Page 1 of 22</div>
+        <button class="home-control garden-intro-home" id="gardenIntroHome" type="button" aria-label="Choose a route" title="Choose a route"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m3.5 10.2 8.5-7 8.5 7v10.3a1 1 0 0 1-1 1h-5.2v-7h-4.6v7H4.5a1 1 0 0 1-1-1V10.2Z" fill="currentColor" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg></button>
       </section>
       <div class="route-ui" id="routeUi" hidden>
       <div class="progress" id="progress" aria-hidden="true"></div>
@@ -558,6 +588,11 @@
         const brandScreen = document.getElementById("brandScreen");
         const pickerScreen = document.getElementById("pickerScreen");
         const routeUi = document.getElementById("routeUi");
+        const gardenRoute = document.getElementById("gardenRoute");
+        const gardenIntroScreen = document.getElementById("gardenIntroScreen");
+        const gardenIntroStart = document.getElementById("gardenIntroStart");
+        const gardenIntroHome = document.getElementById("gardenIntroHome");
+        const gardenIntroProgress = document.getElementById("gardenIntroProgress");
         const shortestRoute = document.getElementById("shortestRoute");
         const counter = document.getElementById("counter");
         const announcement = document.getElementById("announcement");
@@ -572,6 +607,11 @@
           progress.append(segment);
         });
         const segments = [...progress.children];
+        for (let index = 0; index < 22; index++) {
+          const segment = document.createElement("i");
+          if (index === 0) segment.classList.add("done");
+          gardenIntroProgress.append(segment);
+        }
         const loading = document.getElementById("loading");
         const loadingFill = document.getElementById("loadingFill");
         const loadingProgress = document.querySelector('[role="progressbar"]');
@@ -639,8 +679,22 @@
             continueFromBranding();
           }
         });
+        gardenRoute.addEventListener("click", () => {
+          pickerScreen.hidden = true;
+          gardenIntroScreen.hidden = false;
+          gardenIntroStart.focus();
+        });
+        gardenIntroHome.addEventListener("click", () => {
+          gardenIntroScreen.hidden = true;
+          showRoutePicker();
+          gardenRoute.focus();
+        });
+        gardenIntroStart.addEventListener("click", () => {
+          window.location.assign("https://momo-wayfinding.vercel.app/?route=garden");
+        });
         shortestRoute.addEventListener("click", () => {
           pickerScreen.hidden = true;
+          gardenIntroScreen.hidden = true;
           routeUi.hidden = false;
           show(0);
           next.focus();
