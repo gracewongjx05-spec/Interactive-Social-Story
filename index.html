@@ -428,6 +428,15 @@
       }
       @media (prefers-reduced-motion:reduce) { .confetti-piece,.celebration-momo { animation:none!important; } }
       @media (prefers-reduced-motion:reduce) { *,*::before,*::after { animation-duration:.01ms!important; transition-duration:.01ms!important; } }
+      .garden-route-ui { --garden-teal:#00e6b8; --garden-teal-shadow:#00a98a; --garden-teal-hover:#21efc6; }
+      .garden-route-ui .garden-start-route-button { background:var(--garden-teal); box-shadow:0 4px 0 var(--garden-teal-shadow); }
+      .garden-route-ui .garden-start-route-button:hover { background:var(--garden-teal-hover); }
+      .garden-route-ui .garden-start-route-button:active { box-shadow:0 1px 0 var(--garden-teal-shadow); }
+      .garden-route-ui .garden-home-control { background:var(--garden-teal); box-shadow:0 4px 0 var(--garden-teal-shadow); }
+      .garden-route-ui .garden-home-control:hover { background:var(--garden-teal-hover); }
+      .garden-route-ui .garden-home-control:active { transform:translateY(3px); box-shadow:0 1px 0 var(--garden-teal-shadow); }
+      .garden-route-ui .progress i { box-shadow:0 1px 3px rgb(0 166 136 / 24%); }
+      .garden-route-ui .progress i.done { background:var(--garden-teal); box-shadow:0 1px 4px rgb(0 166 136 / 38%); }
     </style>
   </head>
   <body>
