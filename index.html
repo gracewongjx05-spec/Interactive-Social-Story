@@ -680,9 +680,7 @@
           }
         });
         gardenRoute.addEventListener("click", () => {
-          pickerScreen.hidden = true;
-          gardenIntroScreen.hidden = false;
-          gardenIntroStart.focus();
+          window.location.assign("https://momo-wayfinding.vercel.app/?route=garden");
         });
         gardenIntroHome.addEventListener("click", () => {
           gardenIntroScreen.hidden = true;
