@@ -340,32 +340,33 @@
     .slide[data-photo] { object-fit: cover; }
     .slide-caption {
       position: absolute;
-      inset: 0;
-      width: 100%;
-      height: 100%;
       z-index: 1;
+      margin: 0;
+      display: grid;
+      place-items: center;
+      padding: .65cqw 1.2cqw;
+      border: max(2px, .43cqw) solid #00bfff;
+      border-radius: 2.15cqw;
+      background: #00ffd0;
+      color: #080808;
+      font: 500 1.87cqw / 1.2 Arial, sans-serif;
+      text-align: center;
+      text-wrap: balance;
       pointer-events: none;
     }
 
-    /* Reposition the caption embedded in the pathway slide. */
-    .frame[data-route="garden"][data-story-page="18"] .story::before,
-    .frame[data-route="garden"][data-story-page="18"] .story::after {
+    .slide-caption[hidden] { display: none; }
+    .slide-caption strong { font-weight: 800; }
+
+    /* Cover the old caption embedded in the pathway photo. */
+    .frame[data-route="garden"][data-story-page="18"] .story::before {
       content: "";
       position: absolute;
       inset: 0;
       z-index: 1;
-      background: url("assets/garden-18-clean.png") top center / 100% 100% no-repeat;
+      background: url("assets/garden-18-clean.png") center -24.25cqh / 100% 100% no-repeat;
+      clip-path: inset(3.55% 12.65% 72.25% 42.5% round 3cqw);
       pointer-events: none;
-    }
-
-    .frame[data-route="garden"][data-story-page="18"] .story::before {
-      clip-path: inset(3.55% 12.65% 72.25% 42.5% round 3cqw);
-      background-position: center -24.25cqh;
-    }
-
-    .frame[data-route="garden"][data-story-page="18"] .story::after {
-      clip-path: inset(3.55% 12.65% 72.25% 42.5% round 3cqw);
-      transform: translate(2%, 56%);
     }
 
     .hit {
@@ -603,6 +604,37 @@
     .story .back:disabled,
     .story .next:disabled { opacity: .68; }
 
+    .frame[data-route="garden"] .story :is(.home, .back, .next) {
+      width: clamp(24px, 4.65%, 58px);
+      height: auto;
+      aspect-ratio: 1;
+      border: 1px solid #00c5dc;
+      border-radius: clamp(7px, .95cqw, 12px);
+      background: #00e6b8;
+      color: #091b2d;
+      box-shadow: 0 3px 0 #00a5a8, 0 4px 7px #00151f30;
+    }
+
+    .frame[data-route="garden"] .story .home {
+      top: max(22px, 2.6%, calc(env(safe-area-inset-top) + 12px));
+      right: 1.35%;
+    }
+
+    .frame[data-route="garden"] .story .back {
+      left: 1.35%;
+      bottom: 2.6%;
+    }
+
+    .frame[data-route="garden"] .story .next {
+      right: 1.35%;
+      bottom: 2.6%;
+    }
+
+    .frame[data-route="garden"] .story .nav-icon {
+      width: 52%;
+      height: 52%;
+    }
+
     .counter { position:absolute; z-index:5; pointer-events:none; left:50%; bottom:12px; transform:translateX(-50%); padding:8px 12px; border-radius:99px; color:#fff; background:rgb(6 38 121 / 90%); font-size:14px; font-weight:800; text-shadow:0 1px 2px #000; white-space:nowrap; }
     .progress { position:absolute; z-index:4; top:max(10px,env(safe-area-inset-top)); left:16px; right:82px; height:7px; display:flex; gap:4px; pointer-events:none; }
     .progress i { flex:1; border-radius:99px; background:rgb(255 255 255 / 65%); box-shadow:0 1px 3px rgb(0 0 0 / 20%); }
@@ -826,7 +858,7 @@
 
     <section class="story" id="story" aria-label="Wayfinding story">
       <img class="slide" id="slide" src="assets/garden--2-clean.png" alt="Wayfinding social story slide">
-      <img class="slide-caption" id="slideCaption" alt="" hidden>
+      <p class="slide-caption" id="slideCaption" hidden><span></span></p>
       <div class="story-momo-wrap" id="momoWrap" data-overlay="true">
         <span class="story-shadow"></span>
         <img class="story-momo" id="momo" src="assets/momo-original.png" alt="" aria-hidden="true">
@@ -844,14 +876,14 @@
 
   <script>
     const gardenSteps = [
-      { page: "-2", file: "garden--2-clean.png", photo: "route-photos/-2.jpg", captionInset: "63.8462% 62.7962% 17.9487% 6.8720%", photoY: 100, instruction: "From the star, walk to the escalator", momoBox: { x: 603, y: 122, w: 120, h: 120 }, flipX: true, overlay: true },
-      { page: "-1", file: "garden--1.png", instruction: "Go up the escalator", momoBox: { x: 137, y: 220, w: 149, h: 145 }, momoAsset: "momo-escalator-figma.png", momoSource: { w: 804, h: 885, x: 80, y: 136, bw: 694, bh: 638 }, momoAnimation: "escalator", overlay: true },
-      { page: "0", file: "garden-0.png", instruction: "Turn right to the gantry", x: 68, y: 36, w: 17, h: 59, overlay: true },
+      { page: "-2", file: "garden--2-clean.png", photo: "route-photos/-2.jpg", captionInset: "63.8462% 62.7962% 17.9487% 6.8720%", photoY: 100, captionText: "From the star, walk straight", instruction: "From the star, walk to the escalator", momoBox: { x: 603, y: 122, w: 120, h: 120 }, flipX: true, overlay: true },
+      { page: "-1", file: "garden--1.png", photo: "route-photos/escalator.jpg", captionInset: "28.2051% 63.3886% 53.5897% 6.2796%", photoY: 51, instruction: "Go up the escalator", momoBox: { x: 137, y: 220, w: 149, h: 145 }, momoAsset: "momo-escalator-figma.png", momoSource: { w: 804, h: 885, x: 80, y: 136, bw: 694, bh: 638 }, momoAnimation: "escalator", overlay: true },
+      { page: "0", file: "garden-0.png", photo: "route-photos/gantry.jpg", captionInset: "33.0769% 5.5687% 48.7179% 60.4265%", photoY: 34, instruction: "Turn right to the gantry", x: 68, y: 36, w: 17, h: 59, overlay: true },
       { page: "1", file: "garden-1.png", photo: "route-photos/1.jpg", captionInset: "10.2564% 64.6919% 71.5385% 4.9763%", photoY: 60, instruction: "Tap card to exit", x: 60, y: 34, w: 19, h: 62, overlay: true, requiresTap: true },
       { page: "2", file: "garden-2.png", photo: "route-photos/2.jpg", captionInset: "9.2308% 65.4028% 72.5641% 7.4645%", photoY: 28, instruction: "Look for the way out signboard", momoBox: { x: 265, y: 236, w: 84, h: 84 }, momoAsset: "momo-page7-figma.png", momoSource: { w: 894, h: 885, x: 130, y: 141, bw: 650, bh: 658 }, momoAnimation: "idle", overlay: true },
       { page: "3", file: "garden-3-clean.png", photo: "route-photos/3.jpg", captionInset: "10.7692% 10.0711% 68.9744% 56.3981%", photoY: 45, instruction: "Walk to the lift and take the lift up to Level 1", momoBox: { x: 84, y: 190, w: 185, h: 168 }, momoAsset: "momo-lift-figma.png", momoSource: { w: 1317, h: 1194, x: 0, y: 0, bw: 1317, bh: 1194 }, overlay: true },
       { page: "5", file: "garden-5-clean.png", photo: "route-photos/5.jpg", captionInset: "11.7949% 63.0332% 65.8974% 3.3175%", photoY: 55, instruction: "Exit the lift and turn left to the zebra crossing", momoBox: { x: 178, y: 191, w: 134, h: 107 }, overlay: true },
-      { page: "7", file: "garden-7-clean.png", instruction: "You should see the zebra crossing", momoBox: { x: 128, y: 231, w: 127, h: 130 }, momoAsset: "momo-page7-figma.png", momoSource: { w: 894, h: 885, x: 130, y: 141, bw: 650, bh: 658 }, overlay: true },
+      { page: "7", file: "garden-7-clean.png", captionInset: "33.85% 62.08% 47.43% 7.34%", instruction: "You should see the zebra crossing", momoBox: { x: 128, y: 231, w: 127, h: 130 }, momoAsset: "momo-page7-figma.png", momoSource: { w: 894, h: 885, x: 130, y: 141, bw: 650, bh: 658 }, overlay: true },
       { page: "8", file: "garden-8-clean.png", photo: "route-photos/8.jpg", captionInset: "10.2564% 64.3365% 71.5385% 5.3318%", photoY: 65, instruction: "Look out for vehicles before crossing", momoBox: { x: 246, y: 185, w: 96, h: 76 }, overlay: true },
       { page: "9", file: "garden-9-clean.png", photo: "route-photos/9.jpg", captionInset: "8.7179% 13.0332% 72.0513% 56.9905%", photoY: 54, instruction: "Walk past the vending machine", momoBox: { x: 602, y: 192, w: 126, h: 115 }, momoAsset: "momo-page9-figma.png", momoSource: { w: 734, h: 886, x: 107, y: 195, bw: 570, bh: 542 }, flipX: true, overlay: true },
       { page: "10", file: "garden-10-clean.png", photo: "route-photos/10.jpg", captionInset: "9.2308% 57.2275% 72.5641% 4.6209%", photoY: 48, instruction: "You should see Oldham Lane", momoBox: { x: 535, y: 172, w: 98, h: 112 }, momoAsset: "momo-page10-figma.png", momoSource: { w: 767, h: 886, x: 73, y: 65, bw: 658, bh: 758 }, overlay: true },
@@ -860,7 +892,7 @@
       { page: "13", file: "garden-13-clean.png", photo: "route-photos/13.jpg", captionInset: "18.7179% 8.0569% 63.0769% 59.8341%", photoY: 58, captionOffsetX: -54, instruction: "Follow the pavement", momoBox: { x: 125, y: 215, w: 132, h: 104 }, momoAnimation: "pointRight", overlay: true },
       { page: "16", file: "garden-16-clean.png", photo: "route-photos/16.jpg", captionInset: "23.8462% 3.3175% 57.9487% 67.7725%", photoY: 58, instruction: "Continue to follow the path", momoBox: { x: 617, y: 208, w: 119, h: 94 }, overlay: true },
       { page: "17", file: "garden-17-clean.png", photo: "route-photos/17.jpg", captionInset: "32.5641% 14.3365% 49.2308% 60.4265%", photoY: 55, instruction: "Go down the slope carefully", momoBox: { x: 540, y: 256, w: 150, h: 118 }, overlay: true },
-      { page: "18", file: "garden-18-clean.png", instruction: "You should see a coloured pathway and an exit on the right", momoBox: { x: 360, y: 141, w: 95, h: 76 }, overlay: true },
+      { page: "18", file: "garden-18-clean.png", captionInset: "59.55% 10.65% 16.25% 44.5%", instruction: "You should see a coloured pathway and an exit on the right", momoBox: { x: 360, y: 141, w: 95, h: 76 }, overlay: true },
       { page: "20", file: "garden-20-clean.png", photo: "route-photos/20.jpg", captionInset: "16.4103% 58.8863% 68.4615% 8.8863%", photoY: 52, instruction: "You should see a door", momoBox: { x: 143, y: 192, w: 139, h: 164 }, momoAsset: "momo-page10-figma.png", momoSource: { w: 767, h: 886, x: 73, y: 65, bw: 658, bh: 758 }, overlay: true },
       { page: "21", file: "garden-21-clean.png", photo: "route-photos/21.jpg", captionInset: "29.7436% 59.0047% 55.1282% 10.3081%", photoY: 49, instruction: "Pull open the door", momoBox: { x: 125, y: 194, w: 184, h: 177 }, momoAsset: "momo-page9-figma.png", momoSource: { w: 734, h: 886, x: 107, y: 195, bw: 569, bh: 541 }, flipX: true, overlay: true },
       { page: "22", file: "garden-22-clean.png", photo: "route-photos/22.jpg", captionInset: "15.6410% 61.2559% 56.4103% 6.2796%", photoY: 47, instruction: "Look for the directions to Banyan Cove", overlay: true },
@@ -954,8 +986,7 @@
       const assets = new Set();
       for (const step of steps) {
         if (!step) continue;
-        assets.add(step.file);
-        if (step.photo) assets.add(step.photo);
+        assets.add(step.photo || step.file);
         assets.add(step.momoAsset || gardenAnimation(step).asset);
       }
 
@@ -1025,11 +1056,23 @@
       slide.src = "assets/" + (step.photo || step.file);
       slide.toggleAttribute("data-photo", Boolean(step.photo));
       slide.style.objectPosition = step.photo ? `50% ${step.photoY}%` : "";
-      slideCaption.hidden = !step.photo;
-      if (step.photo) {
-        slideCaption.src = "assets/" + step.file;
-        slideCaption.style.clipPath = `inset(${step.captionInset} round 2.9cqw)`;
-        slideCaption.style.transform = step.captionOffsetX ? `translateX(${step.captionOffsetX}%)` : "";
+      slideCaption.hidden = !isGarden || !step.captionInset;
+      if (!slideCaption.hidden) {
+        const [top, right, bottom, left] = step.captionInset.split(" ").map(parseFloat);
+        const offset = step.captionOffsetX || 0;
+        slideCaption.style.inset = `${top}% ${right - offset}% ${bottom}% ${left + offset}%`;
+        const caption = step.captionText || step.instruction;
+        const keywords = /\b(walk straight|go up|turn right|turn left|way out signboard|level 1|zebra crossing|walk past|vending machine|oldham lane|go down|coloured pathway|pull open|banyan cove|exhibition venue|star|escalator|gantry|tap|card|exit|walk|lift|up|vehicles|traffic|cross(?:ing)?|road|follow|pavement|path|slope|right|door|directions|arrived)\b/gi;
+        const captionContent = slideCaption.firstElementChild;
+        captionContent.replaceChildren();
+        let cursor = 0;
+        for (const match of caption.matchAll(keywords)) {
+          const emphasis = document.createElement("strong");
+          emphasis.textContent = match[0];
+          captionContent.append(caption.slice(cursor, match.index), emphasis);
+          cursor = match.index + match[0].length;
+        }
+        captionContent.append(caption.slice(cursor));
       }
       slide.alt = (isGarden ? "Garden Route" : "Shortest Route") + " social story slide";
       const momoAsset = step.momoAsset || animation.asset;
