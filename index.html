@@ -458,6 +458,36 @@
         .intro p { margin-top:clamp(5px,.81cqw,12px); font-size:clamp(12px,1.55cqw,23px); }
         .start-route-button { min-height:clamp(38px,3.78cqw,56px); margin-top:clamp(8px,2.02cqw,30px); }
       }
+      @media (pointer:coarse) {
+        .route-ui {
+          --mobile-control-size:clamp(30px,5.2cqw,44px);
+          --mobile-control-inset:clamp(6px,1.8cqw,16px);
+        }
+        .route-ui .controls {
+          bottom:max(var(--mobile-control-inset),calc(env(safe-area-inset-bottom) - (100dvh - 100cqh) / 2));
+        }
+        .route-ui .home-control {
+          right:max(var(--mobile-control-inset),calc(env(safe-area-inset-right) - (100vw - 100cqw) / 2));
+        }
+        .route-ui .home-control,
+        .route-ui #back,
+        .route-ui #next[aria-label="Next page"] {
+          width:var(--mobile-control-size);
+          height:var(--mobile-control-size);
+          min-width:0;
+          min-height:0;
+          padding:0;
+          display:grid;
+          place-items:center;
+          border-width:2px;
+          border-radius:clamp(8px,1.6cqw,12px);
+        }
+        .route-ui #back span,
+        .route-ui #next[aria-label="Next page"] span { display:none; }
+        .route-ui .home-control svg,
+        .route-ui #back svg,
+        .route-ui #next[aria-label="Next page"] svg { width:55%; height:55%; }
+      }
       @media (orientation:portrait) and (max-width:700px) {
         .book { display:none; }
         .landscape-help { min-height:100dvh; padding:28px; display:flex; flex-direction:column; justify-content:center; align-items:center; gap:18px; text-align:center; color:#fff; }
