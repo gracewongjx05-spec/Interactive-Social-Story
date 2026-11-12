@@ -25,8 +25,12 @@
       --safe-right: env(safe-area-inset-right, 0px);
       --safe-bottom: env(safe-area-inset-bottom, 0px);
       --safe-left: env(safe-area-inset-left, 0px);
+      --frame-gutter: clamp(8px, 1.5vw, 16px);
       height: 100dvh;
-      padding: var(--safe-top) var(--safe-right) var(--safe-bottom) var(--safe-left);
+      padding: calc(var(--safe-top) + var(--frame-gutter))
+        calc(var(--safe-right) + var(--frame-gutter))
+        calc(var(--safe-bottom) + var(--frame-gutter))
+        calc(var(--safe-left) + var(--frame-gutter));
       display: grid;
       place-items: center;
     }
@@ -34,11 +38,13 @@
     .frame {
       position: relative;
       width: min(100%, 216.41vh);
-      width: min(100%, calc((100dvh - var(--safe-top) - var(--safe-bottom)) * 844 / 390));
+      width: min(100%, calc((100dvh - var(--safe-top) - var(--safe-bottom) - 2 * var(--frame-gutter)) * 844 / 390));
       height: auto;
       aspect-ratio: 844 / 390;
       overflow: hidden;
+      border-radius: clamp(10px, 2.4vw, 24px);
       background: #fff;
+      box-shadow: 0 0 0 clamp(3px, .6vw, 7px) #101a2b, 0 20px 80px rgb(0 0 0 / 30%);
       isolation: isolate;
       container-type: size;
     }
@@ -649,6 +655,11 @@
       background: #00e6b8;
       color: #091b2d;
       box-shadow: 0 3px 0 #00a5a8, 0 4px 7px #00151f30;
+    }
+
+    .garden-intro .garden-intro-start {
+      border: max(2px, .43cqw) solid #00bfff;
+      border-radius: clamp(10px, 1.25cqw, 18px);
     }
 
     .garden-intro .home {
