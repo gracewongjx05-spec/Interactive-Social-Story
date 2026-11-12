@@ -323,6 +323,7 @@
 
     .slide-caption {
       position: absolute;
+      inset: var(--caption-inset);
       z-index: 1;
       width: fit-content;
       max-width: var(--caption-max-width);
@@ -343,6 +344,16 @@
 
     .slide-caption[hidden] { display: none; }
     .slide-caption strong { font-weight: 800; }
+
+    @media (pointer: coarse) {
+      .frame[data-route="garden"]:not([data-story-page="7"]) .slide-caption {
+        top: var(--caption-center-y);
+        bottom: auto;
+        height: auto;
+        margin-block: 0;
+        transform: translateY(-50%);
+      }
+    }
 
     /* Keep the caption large enough to cover the text in the zebra-crossing photo. */
     .frame[data-route="garden"][data-story-page="7"] .slide-caption {
@@ -1087,7 +1098,8 @@
       if (!slideCaption.hidden) {
         const [top, right, bottom, left] = step.captionInset.split(" ").map(parseFloat);
         const offset = step.captionOffsetX || 0;
-        slideCaption.style.inset = `${top}% ${right - offset}% ${bottom}% ${left + offset}%`;
+        slideCaption.style.setProperty("--caption-center-y", `${(100 + top - bottom) / 2}%`);
+        slideCaption.style.setProperty("--caption-inset", `${top}% ${right - offset}% ${bottom}% ${left + offset}%`);
         slideCaption.style.setProperty("--caption-max-width", `${100 - left - right}%`);
         const caption = step.captionText || step.instruction;
         const keywords = /\b(walk straight|go up|turn right|turn left|way out signboard|level 1|zebra crossing|walk past|vending machine|oldham lane|go down|coloured pathway|pull open|banyan cove|exhibition venue|star|escalator|gantry|tap|card|exit|walk|lift|up|vehicles|traffic|cross(?:ing)?|road|follow|pavement|path|slope|right|door|directions|arrived)\b/gi;
