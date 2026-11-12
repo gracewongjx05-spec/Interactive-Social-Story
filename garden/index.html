@@ -857,7 +857,7 @@
       { page: "10", file: "garden-10-clean.png", photo: "route-photos/10.jpg", captionInset: "9.2308% 57.2275% 72.5641% 4.6209%", photoY: 48, instruction: "You should see Oldham Lane", momoBox: { x: 535, y: 172, w: 98, h: 112 }, momoAsset: "momo-page10-figma.png", momoSource: { w: 767, h: 886, x: 73, y: 65, bw: 658, bh: 758 }, overlay: true },
       { page: "11", file: "garden-11-clean.png", photo: "route-photos/11.jpg", captionInset: "7.9487% 9.7156% 73.8462% 60.0711%", photoY: 56, instruction: "Look out for traffic before crossing", overlay: false },
       { page: "12", file: "garden-12-clean.png", photo: "route-photos/12.jpg", captionInset: "17.6923% 25.5924% 66.6667% 39.4550%", photoY: 58, captionOffsetX: -38, instruction: "Carefully cross the road", momoBox: { x: 291, y: 142, w: 66, h: 64 }, momoAsset: "momo-page12-figma.png", momoSource: { w: 734, h: 886, x: 107, y: 195, bw: 569, bh: 541 }, flipX: true, overlay: true },
-      { page: "13", file: "garden-13-clean.png", photo: "route-photos/13.jpg", captionInset: "18.7179% 8.0569% 63.0769% 59.8341%", photoY: 58, instruction: "Follow the pavement", momoBox: { x: 633, y: 215, w: 132, h: 104 }, overlay: true },
+      { page: "13", file: "garden-13-clean.png", photo: "route-photos/13.jpg", captionInset: "18.7179% 8.0569% 63.0769% 59.8341%", photoY: 58, captionOffsetX: -54, instruction: "Follow the pavement", momoBox: { x: 125, y: 215, w: 132, h: 104 }, momoAnimation: "pointRight", overlay: true },
       { page: "16", file: "garden-16-clean.png", photo: "route-photos/16.jpg", captionInset: "23.8462% 3.3175% 57.9487% 67.7725%", photoY: 58, instruction: "Continue to follow the path", momoBox: { x: 617, y: 208, w: 119, h: 94 }, overlay: true },
       { page: "17", file: "garden-17-clean.png", photo: "route-photos/17.jpg", captionInset: "32.5641% 14.3365% 49.2308% 60.4265%", photoY: 55, instruction: "Go down the slope carefully", momoBox: { x: 540, y: 256, w: 150, h: 118 }, overlay: true },
       { page: "18", file: "garden-18-clean.png", instruction: "You should see a coloured pathway and an exit on the right", momoBox: { x: 360, y: 141, w: 95, h: 76 }, overlay: true },
@@ -936,6 +936,7 @@
     let tapped = false;
     let autoTapTimer = 0;
     let tapStarted = false;
+    const preloadedImages = new Map();
 
     function wait(ms) {
       return new Promise(resolve => setTimeout(resolve, ms));
@@ -943,6 +944,34 @@
 
     function activeSteps() {
       return route === "garden" ? gardenSteps : shortestSteps;
+    }
+
+    function gardenAnimation(step) {
+      return MOMO_ANIMATIONS[step.momoAnimation] || getMomoAnimation(step.instruction);
+    }
+
+    function preloadGardenSteps(...steps) {
+      const assets = new Set();
+      for (const step of steps) {
+        if (!step) continue;
+        assets.add(step.file);
+        if (step.photo) assets.add(step.photo);
+        assets.add(step.momoAsset || gardenAnimation(step).asset);
+      }
+
+      for (const asset of preloadedImages.keys()) {
+        if (!assets.has(asset)) preloadedImages.delete(asset);
+      }
+      for (const asset of assets) {
+        if (preloadedImages.has(asset)) continue;
+        const image = new Image();
+        image.fetchPriority = "low";
+        preloadedImages.set(asset, image);
+        image.src = "assets/" + asset;
+        image.decode().catch(() => {
+          if (preloadedImages.get(asset) === image) preloadedImages.delete(asset);
+        });
+      }
     }
 
     function showRoutes() {
@@ -970,6 +999,7 @@
       frame.dataset.motion = "idle";
       status.textContent = "Garden Route introduction";
       document.querySelector("#gardenStart").focus({ preventScroll: true });
+      preloadGardenSteps(gardenSteps[0]);
     }
 
     function openStory(selectedRoute) {
@@ -989,7 +1019,7 @@
       const step = steps[index];
       const isGarden = route === "garden";
       const stepNumber = index + 1;
-      const animation = isGarden ? MOMO_ANIMATIONS[step.momoAnimation] || getMomoAnimation(step.instruction) : MOMO_ANIMATIONS.idle;
+      const animation = isGarden ? gardenAnimation(step) : MOMO_ANIMATIONS.idle;
 
       frame.dataset.storyPage = step.page;
       slide.src = "assets/" + (step.photo || step.file);
@@ -1062,6 +1092,7 @@
         clearTimeout(autoTapTimer);
         autoTapTimer = window.setTimeout(playCardTap, 280);
       }
+      if (isGarden) preloadGardenSteps(step, steps[index + 1], steps[index - 1]);
     }
 
     async function nextStep() {
