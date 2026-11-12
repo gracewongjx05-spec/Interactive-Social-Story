@@ -70,19 +70,23 @@
       color: #111;
     }
     .garden-intro-copy h1 { margin: 0; font-size: clamp(18px, 4cqw, 46px); line-height: 1.15; }
+    #gardenIntroTitle:focus { outline: none; }
     .garden-intro-copy p { margin: 1.5cqw 0; font-size: clamp(12px, 2.2cqw, 23px); color: #475467; }
     .garden-intro-copy .garden-intro-label { color: #062679; font-weight: 700; text-transform: uppercase; }
     .garden-intro-start {
       align-self: flex-start;
       margin-top: 1cqw;
-      padding: .65em 1em;
-      border: 2px solid #062679;
-      border-radius: 12px;
-      background: #00c9ff;
-      color: #111;
-      font-size: clamp(12px, 2cqw, 22px);
+      width: min(100%, 24cqw);
+      min-width: min(100%, 112px);
+      padding: .9em .75em;
+      font-size: clamp(12px, 1.55cqw, 20px);
       font-weight: 700;
       cursor: pointer;
+    }
+
+    .garden-intro-start:focus-visible {
+      outline: 3px solid #062679;
+      outline-offset: 3px;
     }
 
     .loading-screen {
@@ -338,18 +342,29 @@
 
     .slide { object-fit: contain; }
     .slide[data-photo] { object-fit: cover; }
+    @font-face {
+      font-family: "DM Sans";
+      src: url("assets/fonts/dm-sans-latin.woff2") format("woff2");
+      font-style: normal;
+      font-weight: 500 800;
+      font-display: swap;
+    }
+
     .slide-caption {
       position: absolute;
       z-index: 1;
-      margin: 0;
+      width: fit-content;
+      max-width: var(--caption-max-width);
+      height: fit-content;
+      margin: auto;
       display: grid;
       place-items: center;
-      padding: .65cqw 1.2cqw;
+      padding: .65cqw 1.05cqw;
       border: max(2px, .43cqw) solid #00bfff;
       border-radius: 2.15cqw;
       background: #00ffd0;
       color: #080808;
-      font: 500 1.87cqw / 1.2 Arial, sans-serif;
+      font: 500 2.1cqw / 1.2 "DM Sans", Arial, sans-serif;
       text-align: center;
       text-wrap: balance;
       pointer-events: none;
@@ -357,6 +372,13 @@
 
     .slide-caption[hidden] { display: none; }
     .slide-caption strong { font-weight: 800; }
+
+    /* Keep the caption large enough to cover the text in the zebra-crossing photo. */
+    .frame[data-route="garden"][data-story-page="7"] .slide-caption {
+      width: auto;
+      height: auto;
+      margin: 0;
+    }
 
     /* Cover the old caption embedded in the pathway photo. */
     .frame[data-route="garden"][data-story-page="18"] .story::before {
@@ -604,10 +626,15 @@
     .story .back:disabled,
     .story .next:disabled { opacity: .68; }
 
-    .frame[data-route="garden"] .story :is(.home, .back, .next) {
+    .frame[data-route="garden"] .story :is(.home, .back, .next),
+    .garden-intro .home {
       width: clamp(24px, 4.65%, 58px);
       height: auto;
       aspect-ratio: 1;
+    }
+
+    .frame[data-route="garden"] .story :is(.home, .back, .next),
+    .garden-intro :is(.home, .garden-intro-start) {
       border: 1px solid #00c5dc;
       border-radius: clamp(7px, .95cqw, 12px);
       background: #00e6b8;
@@ -615,7 +642,13 @@
       box-shadow: 0 3px 0 #00a5a8, 0 4px 7px #00151f30;
     }
 
-    .frame[data-route="garden"] .story .home {
+    .garden-intro .home {
+      display: grid;
+      place-items: center;
+    }
+
+    .frame[data-route="garden"] .story .home,
+    .garden-intro .home {
       top: max(22px, 2.6%, calc(env(safe-area-inset-top) + 12px));
       right: 1.35%;
     }
@@ -630,12 +663,14 @@
       bottom: 2.6%;
     }
 
-    .frame[data-route="garden"] .story .nav-icon {
+    .frame[data-route="garden"] .story .nav-icon,
+    .garden-intro .home .nav-icon {
       width: 52%;
       height: 52%;
     }
 
     .counter { position:absolute; z-index:5; pointer-events:none; left:50%; bottom:12px; transform:translateX(-50%); padding:8px 12px; border-radius:99px; color:#fff; background:rgb(6 38 121 / 90%); font-size:14px; font-weight:800; text-shadow:0 1px 2px #000; white-space:nowrap; }
+    .frame[data-route="garden"] .counter { font-family: "DM Sans", Arial, sans-serif; }
     .progress { position:absolute; z-index:4; top:max(10px,env(safe-area-inset-top)); left:16px; right:82px; height:7px; display:flex; gap:4px; pointer-events:none; }
     .progress i { flex:1; border-radius:99px; background:rgb(255 255 255 / 65%); box-shadow:0 1px 3px rgb(0 0 0 / 20%); }
     .progress i.done { background:#00e6b8; }
@@ -835,11 +870,12 @@
         </div>
         <div class="garden-intro-copy">
           <p class="garden-intro-label">Garden Route</p>
-          <h1 id="gardenIntroTitle">Lesser people, calmer route.</h1>
+          <h1 id="gardenIntroTitle" tabindex="-1">Lesser people, calmer route.</h1>
           <p>Let’s take a walk through the garden</p>
           <button class="garden-intro-start" id="gardenStart" type="button">Let’s Start! <span aria-hidden="true">→</span></button>
         </div>
       </div>
+      <button class="hit home" id="gardenIntroHome" type="button" aria-label="Return to route selection"><svg class="nav-icon home-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.7 1.7 10.9l1.2 1.5L5 10.7V21h5.3v-6h3.4v6H19V10.7l2.1 1.7 1.2-1.5L12 2.7Z"/></svg></button>
     </section>
 
     <section class="entry completion-screen" aria-label="Route complete">
@@ -1029,7 +1065,7 @@
       frame.dataset.view = "garden-intro";
       frame.dataset.motion = "idle";
       status.textContent = "Garden Route introduction";
-      document.querySelector("#gardenStart").focus({ preventScroll: true });
+      document.querySelector("#gardenIntroTitle").focus({ preventScroll: true });
       preloadGardenSteps(gardenSteps[0]);
     }
 
@@ -1061,6 +1097,7 @@
         const [top, right, bottom, left] = step.captionInset.split(" ").map(parseFloat);
         const offset = step.captionOffsetX || 0;
         slideCaption.style.inset = `${top}% ${right - offset}% ${bottom}% ${left + offset}%`;
+        slideCaption.style.setProperty("--caption-max-width", `${100 - left - right}%`);
         const caption = step.captionText || step.instruction;
         const keywords = /\b(walk straight|go up|turn right|turn left|way out signboard|level 1|zebra crossing|walk past|vending machine|oldham lane|go down|coloured pathway|pull open|banyan cove|exhibition venue|star|escalator|gantry|tap|card|exit|walk|lift|up|vehicles|traffic|cross(?:ing)?|road|follow|pavement|path|slope|right|door|directions|arrived)\b/gi;
         const captionContent = slideCaption.firstElementChild;
@@ -1185,6 +1222,7 @@
 
     document.querySelector("#gardenRoute").addEventListener("click", showGardenIntro);
     document.querySelector("#gardenStart").addEventListener("click", () => openStory("garden"));
+    document.querySelector("#gardenIntroHome").addEventListener("click", showRoutes);
     document.querySelector("#shortestRoute").addEventListener("click", showShortestIntro);
     document.querySelector("#shortStart").addEventListener("click", () => openStory("shortest"));
     document.querySelector("#shortIntroHome").addEventListener("click", showRoutes);
