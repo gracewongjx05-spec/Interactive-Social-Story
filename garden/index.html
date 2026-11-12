@@ -70,56 +70,20 @@
       color: #111;
     }
     .garden-intro-copy h1 { margin: 0; font-size: clamp(18px, 4cqw, 46px); line-height: 1.15; }
-    .garden-intro-copy p { margin: 1.5cqw 0; font-size: clamp(12px, 2.2cqw, 23px); color: #475467; font-weight: 400; }
+    .garden-intro-copy p { margin: 1.5cqw 0; font-size: clamp(12px, 2.2cqw, 23px); color: #475467; }
     .garden-intro-copy .garden-intro-label { color: #062679; font-weight: 700; text-transform: uppercase; }
     .garden-intro-start {
-      width: min(100%, 350px);
-      min-height: clamp(56px, 4.6cqw, 70px);
       align-self: flex-start;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 12px;
-      margin-top: clamp(18px, 2cqw, 30px);
-      padding: 10px 20px;
-      border: 3px solid #00c9ff;
-      border-radius: 18px;
-      background: #00e6b8;
-      color: #101828;
-      box-shadow: 0 4px 0 #00a98a;
-      font-size: clamp(16px, 1.5cqw, 22px);
+      margin-top: 1cqw;
+      padding: .65em 1em;
+      border: 2px solid #062679;
+      border-radius: 12px;
+      background: #00c9ff;
+      color: #111;
+      font-size: clamp(12px, 2cqw, 22px);
       font-weight: 700;
       cursor: pointer;
-      touch-action: manipulation;
-      transition: background .14s ease, transform .14s ease, box-shadow .14s ease;
     }
-    .garden-intro-start:hover { background: #21efc6; }
-    .garden-intro-start:active { transform: translateY(3px); box-shadow: 0 1px 0 #00a98a; }
-    .garden-intro-start:focus-visible { outline: none; }
-    .garden-intro-home {
-      position: absolute;
-      z-index: 8;
-      top: max(17px, env(safe-area-inset-top));
-      right: max(18px, env(safe-area-inset-right));
-      width: clamp(46px, 4.6cqw, 68px);
-      height: clamp(46px, 4.6cqw, 68px);
-      display: grid;
-      place-items: center;
-      padding: 0;
-      border: 3px solid #00c9ff;
-      border-radius: 14px;
-      background: #00e6b8;
-      color: #101828;
-      box-shadow: 0 4px 0 #00a98a;
-      cursor: pointer;
-    }
-    .garden-intro-home svg { width: 42%; height: 42%; fill: currentColor; }
-    .garden-intro-home:hover { background: #21efc6; }
-    .garden-intro-home:active { transform: translateY(3px); box-shadow: 0 1px 0 #00a98a; }
-    .garden-intro-home:focus-visible { outline: 4px solid #fff; outline-offset: 3px; }
-    .garden-intro-counter { bottom: clamp(5px, .81cqw, 12px); font-weight: 400; text-shadow: none; }
-    .garden-intro .progress i { box-shadow: 0 1px 3px rgb(0 166 136 / 24%); }
-    .garden-intro .progress i.done { background: #00e6b8; box-shadow: 0 1px 4px rgb(0 166 136 / 38%); }
 
     .loading-screen {
       background:
@@ -373,6 +337,15 @@
     }
 
     .slide { object-fit: contain; }
+    .slide[data-photo] { object-fit: cover; }
+    .slide-caption {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 1;
+      pointer-events: none;
+    }
 
     /* Reposition the caption embedded in the pathway slide. */
     .frame[data-route="garden"][data-story-page="18"] .story::before,
@@ -491,6 +464,20 @@
       animation: walk-shadow .8s ease-in-out infinite;
     }
 
+    .frame[data-route="garden"][data-story-page="-2"] .story-momo-wrap {
+      transform-origin: 47.5% 82.8%;
+      animation: walk-to-escalator 3.2s ease-in-out forwards;
+    }
+
+    .frame[data-route="garden"][data-story-page="-2"][data-motion="walk"] .story-momo {
+      animation-iteration-count: 4;
+    }
+
+    @keyframes walk-to-escalator {
+      from { translate: 0 0; scale: 1; }
+      to { translate: -24cqw -45cqh; scale: .48; }
+    }
+
     .frame[data-motion="idle"] .story-momo {
       animation: idle-grounded 2.4s ease-in-out infinite;
     }
@@ -556,27 +543,27 @@
     }
 
     .home {
-      right: max(18px, env(safe-area-inset-right));
-      top: max(17px, env(safe-area-inset-top));
-      width: clamp(46px, 4.6cqw, 68px);
-      height: clamp(46px, 4.6cqw, 68px);
-      border-radius: 14px;
+      right: 3.2%;
+      top: 6.2%;
+      width: 5.7%;
+      height: 12.3%;
+      border-radius: 11px;
     }
 
     .back {
-      left: max(18px, env(safe-area-inset-left));
-      bottom: max(18px, env(safe-area-inset-bottom));
-      width: clamp(46px, 4.6cqw, 68px);
-      height: clamp(46px, 4.6cqw, 68px);
-      border-radius: 14px;
+      left: 3.2%;
+      bottom: 6.5%;
+      width: 5.7%;
+      height: 12.3%;
+      border-radius: 11px;
     }
 
     .next {
-      right: max(18px, env(safe-area-inset-right));
-      bottom: max(18px, env(safe-area-inset-bottom));
-      width: clamp(46px, 4.6cqw, 68px);
-      height: clamp(46px, 4.6cqw, 68px);
-      border-radius: 14px;
+      right: 3.2%;
+      bottom: 6.5%;
+      width: 5.7%;
+      height: 12.3%;
+      border-radius: 11px;
     }
 
     .story .home,
@@ -585,31 +572,23 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      border: 3px solid #00c9ff;
-      background: #00e6b8;
-      color: #101828;
-      box-shadow: 0 4px 0 #00a98a;
-      transition: transform .14s ease, filter .14s ease, box-shadow .14s ease, background .14s ease;
+      border: 1px solid #00151f66;
+      background: linear-gradient(135deg, #00ffff 0%, #00d9ff 100%);
+      color: #050505;
+      box-shadow: 0 2px 7px #00151f30, inset 0 1px 0 #ffffffa8;
+      transition: transform .14s ease, filter .14s ease, box-shadow .14s ease;
     }
-
-    .story .home .home-icon { width: 42%; height: 42%; }
-    .story .back .nav-icon,
-    .story .next .nav-icon { width: 68%; height: 68%; }
 
     .story .home:hover:not(:disabled),
     .story .back:hover:not(:disabled),
     .story .next:hover:not(:disabled) {
       filter: brightness(1.04);
-      background: #21efc6;
-      box-shadow: 0 5px 0 #00a98a;
+      box-shadow: 0 3px 9px #00151f45, inset 0 1px 0 #ffffffbf;
     }
 
     .story .home:active:not(:disabled),
     .story .back:active:not(:disabled),
-    .story .next:active:not(:disabled) {
-      transform: translateY(3px);
-      box-shadow: 0 1px 0 #00a98a;
-    }
+    .story .next:active:not(:disabled) { transform: scale(.94); }
 
     .story .home:focus-visible,
     .story .back:focus-visible,
@@ -627,7 +606,7 @@
     .counter { position:absolute; z-index:5; pointer-events:none; left:50%; bottom:12px; transform:translateX(-50%); padding:8px 12px; border-radius:99px; color:#fff; background:rgb(6 38 121 / 90%); font-size:14px; font-weight:800; text-shadow:0 1px 2px #000; white-space:nowrap; }
     .progress { position:absolute; z-index:4; top:max(10px,env(safe-area-inset-top)); left:16px; right:82px; height:7px; display:flex; gap:4px; pointer-events:none; }
     .progress i { flex:1; border-radius:99px; background:rgb(255 255 255 / 65%); box-shadow:0 1px 3px rgb(0 0 0 / 20%); }
-    .progress i.done { background:#00e6b8; box-shadow:0 1px 4px rgb(0 166 136 / 38%); }
+    .progress i.done { background:#00e6b8; }
 
     @container (max-width: 720px) {
       .counter { bottom:clamp(5px,.81cqw,12px); padding:clamp(3px,.54cqw,8px) clamp(6px,.81cqw,12px); font-size:clamp(10px,.95cqw,14px); }
@@ -788,12 +767,36 @@
 </head>
 <body>
   <main class="frame" id="frame" data-view="loading" data-motion="idle" aria-label="MOMO wayfinding social story">
+    <section class="entry loading-screen" aria-label="Loading the wayfinding app">
+      <div class="loading-layout">
+        <div class="loading-character" aria-hidden="true">
+          <span class="loading-shadow"></span>
+          <img class="loading-momo" src="assets/momo-original.png" alt="">
+        </div>
+        <div class="loading-copy">
+          <p class="loading-kicker">MOMO Wayfinding</p>
+          <h1 class="loading-title">Getting your route ready</h1>
+          <p class="loading-message">MOMO is finding the clearest way.</p>
+          <div class="loading-track" role="progressbar" aria-label="Loading" aria-valuemin="0" aria-valuemax="100">
+            <span class="loading-progress"></span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="entry routes" aria-label="Route selection">
+      <img class="entry-art" src="assets/source-routes.png" alt="What would you like to explore today?">
+      <button class="hit route-garden" id="gardenRoute" type="button" aria-label="Garden Route"></button>
+      <button class="hit route-shortest" id="shortestRoute" type="button" aria-label="Shortest Route"></button>
+    </section>
+
+    <section class="entry short-intro" aria-label="Shortest Route introduction">
+      <img class="entry-art" src="assets/short-intro.png" alt="Fewer steps, shortest trip. The fastest way to get there!">
+      <button class="hit short-start" id="shortStart" type="button" aria-label="Start the Shortest Route"></button>
+      <button class="hit short-intro-home" id="shortIntroHome" type="button" aria-label="Return to route selection"></button>
+    </section>
+
     <section class="entry garden-intro" aria-labelledby="gardenIntroTitle">
-      <div class="progress garden-intro-progress" id="gardenIntroProgress" aria-hidden="true"></div>
-      <span class="counter garden-intro-counter" id="gardenIntroCounter" aria-hidden="true">Page 1 of 22</span>
-      <button class="garden-intro-home" id="gardenIntroHome" type="button" aria-label="Return to route selection">
-        <svg class="nav-icon home-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.7 1.7 10.9l1.2 1.5L5 10.7V21h5.3v-6h3.4v6H19V10.7l2.1 1.7 1.2-1.5L12 2.7Z"/></svg>
-      </button>
       <div class="garden-intro-layout">
         <div class="garden-intro-art">
           <img src="assets/momo-page25-figma.png" alt="Momo smiling with eyes closed and holding a flower">
@@ -801,7 +804,7 @@
         <div class="garden-intro-copy">
           <p class="garden-intro-label">Garden Route</p>
           <h1 id="gardenIntroTitle">Lesser people, calmer route.</h1>
-          <p>Let’s take a walk through the garden! Follow the pictures to the exhibition venue.</p>
+          <p>Let’s take a walk through the garden</p>
           <button class="garden-intro-start" id="gardenStart" type="button">Let’s Start! <span aria-hidden="true">→</span></button>
         </div>
       </div>
@@ -823,6 +826,7 @@
 
     <section class="story" id="story" aria-label="Wayfinding story">
       <img class="slide" id="slide" src="assets/garden--2-clean.png" alt="Wayfinding social story slide">
+      <img class="slide-caption" id="slideCaption" alt="" hidden>
       <div class="story-momo-wrap" id="momoWrap" data-overlay="true">
         <span class="story-shadow"></span>
         <img class="story-momo" id="momo" src="assets/momo-original.png" alt="" aria-hidden="true">
@@ -840,35 +844,28 @@
 
   <script>
     const gardenSteps = [
-      { page: "-2", file: "garden--2-clean.png", instruction: "From the star, walk to the escalator", x: 57.5, y: 9.7, w: 24.9, h: 64.6, overlay: true },
+      { page: "-2", file: "garden--2-clean.png", photo: "route-photos/-2.jpg", captionInset: "63.8462% 62.7962% 17.9487% 6.8720%", photoY: 100, instruction: "From the star, walk to the escalator", momoBox: { x: 603, y: 122, w: 120, h: 120 }, flipX: true, overlay: true },
       { page: "-1", file: "garden--1.png", instruction: "Go up the escalator", momoBox: { x: 137, y: 220, w: 149, h: 145 }, momoAsset: "momo-escalator-figma.png", momoSource: { w: 804, h: 885, x: 80, y: 136, bw: 694, bh: 638 }, momoAnimation: "escalator", overlay: true },
       { page: "0", file: "garden-0.png", instruction: "Turn right to the gantry", x: 68, y: 36, w: 17, h: 59, overlay: true },
-      { page: "1", file: "garden-1.png", instruction: "Tap card to exit", x: 60, y: 34, w: 19, h: 62, overlay: true, requiresTap: true },
-      { page: "2", file: "garden-2.png", instruction: "Look for the way out signboard", momoBox: { x: 265, y: 236, w: 84, h: 84 }, momoAsset: "momo-page7-figma.png", momoSource: { w: 894, h: 885, x: 130, y: 141, bw: 650, bh: 658 }, momoAnimation: "idle", overlay: true },
-      { page: "3", file: "garden-3-clean.png", instruction: "Walk to the lift and take the lift up to Level 1", momoBox: { x: 84, y: 190, w: 185, h: 168 }, momoAsset: "momo-lift-figma.png", momoSource: { w: 1317, h: 1194, x: 0, y: 0, bw: 1317, bh: 1194 }, overlay: true },
-      { page: "5", file: "garden-5-clean.png", instruction: "Exit the lift and turn left to the zebra crossing", momoBox: { x: 178, y: 191, w: 134, h: 107 }, overlay: true },
+      { page: "1", file: "garden-1.png", photo: "route-photos/1.jpg", captionInset: "10.2564% 64.6919% 71.5385% 4.9763%", photoY: 60, instruction: "Tap card to exit", x: 60, y: 34, w: 19, h: 62, overlay: true, requiresTap: true },
+      { page: "2", file: "garden-2.png", photo: "route-photos/2.jpg", captionInset: "9.2308% 65.4028% 72.5641% 7.4645%", photoY: 28, instruction: "Look for the way out signboard", momoBox: { x: 265, y: 236, w: 84, h: 84 }, momoAsset: "momo-page7-figma.png", momoSource: { w: 894, h: 885, x: 130, y: 141, bw: 650, bh: 658 }, momoAnimation: "idle", overlay: true },
+      { page: "3", file: "garden-3-clean.png", photo: "route-photos/3.jpg", captionInset: "10.7692% 10.0711% 68.9744% 56.3981%", photoY: 45, instruction: "Walk to the lift and take the lift up to Level 1", momoBox: { x: 84, y: 190, w: 185, h: 168 }, momoAsset: "momo-lift-figma.png", momoSource: { w: 1317, h: 1194, x: 0, y: 0, bw: 1317, bh: 1194 }, overlay: true },
+      { page: "5", file: "garden-5-clean.png", photo: "route-photos/5.jpg", captionInset: "11.7949% 63.0332% 65.8974% 3.3175%", photoY: 55, instruction: "Exit the lift and turn left to the zebra crossing", momoBox: { x: 178, y: 191, w: 134, h: 107 }, overlay: true },
       { page: "7", file: "garden-7-clean.png", instruction: "You should see the zebra crossing", momoBox: { x: 128, y: 231, w: 127, h: 130 }, momoAsset: "momo-page7-figma.png", momoSource: { w: 894, h: 885, x: 130, y: 141, bw: 650, bh: 658 }, overlay: true },
-      { page: "8", file: "garden-8-clean.png", instruction: "Look out for vehicles before crossing", momoBox: { x: 246, y: 185, w: 96, h: 76 }, overlay: true },
-      { page: "9", file: "garden-9-clean.png", instruction: "Walk past the vending machine", momoBox: { x: 602, y: 192, w: 126, h: 115 }, momoAsset: "momo-page9-figma.png", momoSource: { w: 734, h: 886, x: 107, y: 195, bw: 570, bh: 542 }, flipX: true, overlay: true },
-      { page: "10", file: "garden-10-clean.png", instruction: "You should see Oldham Lane", momoBox: { x: 580, y: 206, w: 98, h: 112 }, momoAsset: "momo-page10-figma.png", momoSource: { w: 767, h: 886, x: 73, y: 65, bw: 658, bh: 758 }, overlay: true },
-      { page: "11", file: "garden-11-clean.png", instruction: "Look out for traffic before crossing", overlay: false },
-      { page: "12", file: "garden-12-clean.png", instruction: "Carefully cross the road", momoBox: { x: 423, y: 155, w: 107, h: 103 }, momoAsset: "momo-page12-figma.png", momoSource: { w: 734, h: 886, x: 107, y: 195, bw: 569, bh: 541 }, flipX: true, overlay: true },
-      { page: "13", file: "garden-13-clean.png", instruction: "Follow the pavement", momoBox: { x: 633, y: 215, w: 132, h: 104 }, overlay: true },
-      { page: "16", file: "garden-16-clean.png", instruction: "Continue to follow the path", momoBox: { x: 617, y: 208, w: 119, h: 94 }, overlay: true },
-      { page: "17", file: "garden-17-clean.png", instruction: "Go down the slope carefully", momoBox: { x: 540, y: 256, w: 150, h: 118 }, overlay: true },
+      { page: "8", file: "garden-8-clean.png", photo: "route-photos/8.jpg", captionInset: "10.2564% 64.3365% 71.5385% 5.3318%", photoY: 65, instruction: "Look out for vehicles before crossing", momoBox: { x: 246, y: 185, w: 96, h: 76 }, overlay: true },
+      { page: "9", file: "garden-9-clean.png", photo: "route-photos/9.jpg", captionInset: "8.7179% 13.0332% 72.0513% 56.9905%", photoY: 54, instruction: "Walk past the vending machine", momoBox: { x: 602, y: 192, w: 126, h: 115 }, momoAsset: "momo-page9-figma.png", momoSource: { w: 734, h: 886, x: 107, y: 195, bw: 570, bh: 542 }, flipX: true, overlay: true },
+      { page: "10", file: "garden-10-clean.png", photo: "route-photos/10.jpg", captionInset: "9.2308% 57.2275% 72.5641% 4.6209%", photoY: 48, instruction: "You should see Oldham Lane", momoBox: { x: 535, y: 172, w: 98, h: 112 }, momoAsset: "momo-page10-figma.png", momoSource: { w: 767, h: 886, x: 73, y: 65, bw: 658, bh: 758 }, overlay: true },
+      { page: "11", file: "garden-11-clean.png", photo: "route-photos/11.jpg", captionInset: "7.9487% 9.7156% 73.8462% 60.0711%", photoY: 56, instruction: "Look out for traffic before crossing", overlay: false },
+      { page: "12", file: "garden-12-clean.png", photo: "route-photos/12.jpg", captionInset: "17.6923% 25.5924% 66.6667% 39.4550%", photoY: 58, captionOffsetX: -38, instruction: "Carefully cross the road", momoBox: { x: 291, y: 142, w: 66, h: 64 }, momoAsset: "momo-page12-figma.png", momoSource: { w: 734, h: 886, x: 107, y: 195, bw: 569, bh: 541 }, flipX: true, overlay: true },
+      { page: "13", file: "garden-13-clean.png", photo: "route-photos/13.jpg", captionInset: "18.7179% 8.0569% 63.0769% 59.8341%", photoY: 58, instruction: "Follow the pavement", momoBox: { x: 633, y: 215, w: 132, h: 104 }, overlay: true },
+      { page: "16", file: "garden-16-clean.png", photo: "route-photos/16.jpg", captionInset: "23.8462% 3.3175% 57.9487% 67.7725%", photoY: 58, instruction: "Continue to follow the path", momoBox: { x: 617, y: 208, w: 119, h: 94 }, overlay: true },
+      { page: "17", file: "garden-17-clean.png", photo: "route-photos/17.jpg", captionInset: "32.5641% 14.3365% 49.2308% 60.4265%", photoY: 55, instruction: "Go down the slope carefully", momoBox: { x: 540, y: 256, w: 150, h: 118 }, overlay: true },
       { page: "18", file: "garden-18-clean.png", instruction: "You should see a coloured pathway and an exit on the right", momoBox: { x: 360, y: 141, w: 95, h: 76 }, overlay: true },
-      { page: "20", file: "garden-20-clean.png", instruction: "You should see a door", momoBox: { x: 143, y: 192, w: 139, h: 164 }, momoAsset: "momo-page10-figma.png", momoSource: { w: 767, h: 886, x: 73, y: 65, bw: 658, bh: 758 }, overlay: true },
-      { page: "21", file: "garden-21-clean.png", instruction: "Pull open the door", momoBox: { x: 125, y: 194, w: 184, h: 177 }, momoAsset: "momo-page9-figma.png", momoSource: { w: 734, h: 886, x: 107, y: 195, bw: 569, bh: 541 }, flipX: true, overlay: true },
-      { page: "22", file: "garden-22-clean.png", instruction: "Look for the directions to Banyan Cove", overlay: true },
-      { page: "25", file: "garden-25-clean.png", instruction: "You have arrived at the exhibition venue", momoBox: { x: 572, y: 203, w: 130, h: 156 }, momoAsset: "momo-page25-figma.png", momoSource: { w: 864, h: 885, x: 129, y: 83, bw: 608, bh: 741 }, overlay: true }
+      { page: "20", file: "garden-20-clean.png", photo: "route-photos/20.jpg", captionInset: "16.4103% 58.8863% 68.4615% 8.8863%", photoY: 52, instruction: "You should see a door", momoBox: { x: 143, y: 192, w: 139, h: 164 }, momoAsset: "momo-page10-figma.png", momoSource: { w: 767, h: 886, x: 73, y: 65, bw: 658, bh: 758 }, overlay: true },
+      { page: "21", file: "garden-21-clean.png", photo: "route-photos/21.jpg", captionInset: "29.7436% 59.0047% 55.1282% 10.3081%", photoY: 49, instruction: "Pull open the door", momoBox: { x: 125, y: 194, w: 184, h: 177 }, momoAsset: "momo-page9-figma.png", momoSource: { w: 734, h: 886, x: 107, y: 195, bw: 569, bh: 541 }, flipX: true, overlay: true },
+      { page: "22", file: "garden-22-clean.png", photo: "route-photos/22.jpg", captionInset: "15.6410% 61.2559% 56.4103% 6.2796%", photoY: 47, instruction: "Look for the directions to Banyan Cove", overlay: true },
+      { page: "25", file: "garden-25-clean.png", photo: "route-photos/25.jpg", captionInset: "11.0256% 11.0190% 69.2308% 57.7014%", photoY: 60, instruction: "You have arrived at the exhibition venue", momoBox: { x: 572, y: 203, w: 130, h: 156 }, momoAsset: "momo-page25-figma.png", momoSource: { w: 864, h: 885, x: 129, y: 83, bw: 608, bh: 741 }, overlay: true }
     ];
-
-     const gardenIntroProgress = document.querySelector("#gardenIntroProgress");
-    gardenIntroProgress.replaceChildren(...Array.from({ length: gardenSteps.length + 1 }, (_, index) => {
-      const segment = document.createElement("i");
-      if (index === 0) segment.classList.add("done");
-      return segment;
-    }));
 
     const MOMO_ANIMATIONS = Object.freeze({
       walk: { name: "walk", asset: "momo-idle.svg", source: { w: 238, h: 285, x: 37, y: 86, bw: 176, bh: 150 } },
@@ -900,9 +897,29 @@
       return MOMO_ANIMATIONS[rule?.animation || "idle"];
     }
 
+    const shortestSteps = [
+      { page: "1", file: "short-01.png" },
+      { page: "2", file: "short-02.png" },
+      { page: "3", file: "short-03.png" },
+      { page: "4", file: "short-04.png" },
+      { page: "5", file: "short-05.png" },
+      { page: "6", file: "short-06.png" },
+      { page: "7", file: "short-07.png" },
+      { page: "8", file: "short-08.png" },
+      { page: "9", file: "short-09.png" },
+      { page: "11", file: "short-11.png" },
+      { page: "12", file: "short-12.png" },
+      { page: "13", file: "short-13.png" },
+      { page: "14", file: "short-14.png" },
+      { page: "15", file: "short-15.png" },
+      { page: "16", file: "short-16.png" },
+      { page: "17", file: "short-17.png" }
+    ];
+
     const frame = document.querySelector("#frame");
     const story = document.querySelector("#story");
     const slide = document.querySelector("#slide");
+    const slideCaption = document.querySelector("#slideCaption");
     const momo = document.querySelector("#momo");
     const momoWrap = document.querySelector("#momoWrap");
     const success = document.querySelector("#success");
@@ -925,7 +942,7 @@
     }
 
     function activeSteps() {
-      return gardenSteps;
+      return route === "garden" ? gardenSteps : shortestSteps;
     }
 
     function showRoutes() {
@@ -939,6 +956,13 @@
       frame.dataset.motion = "arrival";
       completionMessage.textContent = `You completed the ${route === "garden" ? "Garden" : "Shortest"} Route. Great work!`;
       status.textContent = "Congratulations, you completed the route.";
+    }
+
+    function showShortestIntro() {
+      busy = false;
+      frame.dataset.view = "short-intro";
+      frame.dataset.motion = "idle";
+      status.textContent = "Shortest Route introduction";
     }
 
     function showGardenIntro() {
@@ -968,7 +992,15 @@
       const animation = isGarden ? MOMO_ANIMATIONS[step.momoAnimation] || getMomoAnimation(step.instruction) : MOMO_ANIMATIONS.idle;
 
       frame.dataset.storyPage = step.page;
-      slide.src = "assets/" + step.file;
+      slide.src = "assets/" + (step.photo || step.file);
+      slide.toggleAttribute("data-photo", Boolean(step.photo));
+      slide.style.objectPosition = step.photo ? `50% ${step.photoY}%` : "";
+      slideCaption.hidden = !step.photo;
+      if (step.photo) {
+        slideCaption.src = "assets/" + step.file;
+        slideCaption.style.clipPath = `inset(${step.captionInset} round 2.9cqw)`;
+        slideCaption.style.transform = step.captionOffsetX ? `translateX(${step.captionOffsetX}%)` : "";
+      }
       slide.alt = (isGarden ? "Garden Route" : "Shortest Route") + " social story slide";
       const momoAsset = step.momoAsset || animation.asset;
       const momoSource = step.momoSource || animation.source;
@@ -1077,8 +1109,11 @@
       status.textContent = "Card tap complete";
     }
 
-    document.querySelector("#gardenIntroHome").addEventListener("click", showRoutes);
+    document.querySelector("#gardenRoute").addEventListener("click", showGardenIntro);
     document.querySelector("#gardenStart").addEventListener("click", () => openStory("garden"));
+    document.querySelector("#shortestRoute").addEventListener("click", showShortestIntro);
+    document.querySelector("#shortStart").addEventListener("click", () => openStory("shortest"));
+    document.querySelector("#shortIntroHome").addEventListener("click", showRoutes);
     document.querySelector("#completionHome").addEventListener("click", showRoutes);
     document.querySelector("#home").addEventListener("click", showRoutes);
     backButton.addEventListener("click", previousStep);
@@ -1089,13 +1124,14 @@
         if (event.key === "ArrowRight") nextStep();
         if (event.key === "ArrowLeft") previousStep();
         if (event.key === "Escape") showRoutes();
-      } else if (event.key === "Escape" && (frame.dataset.view === "garden-intro")) {
+      } else if (event.key === "Escape" && (frame.dataset.view === "short-intro" || frame.dataset.view === "garden-intro")) {
         showRoutes();
       }
     });
 
     window.__wayfinding = {
       showRoutes,
+      showShortestIntro,
       openStory,
       nextStep,
       previousStep,
