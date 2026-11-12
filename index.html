@@ -210,11 +210,33 @@
       .route-instruction-three span { white-space:nowrap; }
       .route-instruction-three strong { font-weight:800; }
       .route-step-four-photo { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; object-position:center 50%; }
-      .route-step-four-momo { position:absolute; z-index:2; left:58%; top:53%; width:25%; height:35%; object-fit:contain; transform-origin:70% 56%; animation:momo-tap-card 3.4s ease-in-out infinite; }
+      .route-step-four-momo { position:absolute; z-index:2; left:58%; top:53%; width:25%; height:35%; object-fit:contain; transform-origin:70% 56%; transform:scaleX(-1); }
+      .route-step-four.active .route-step-four-momo {
+        animation: momo-tap-card .48s .28s ease-out both, momo-tap-confirm .62s .76s ease-out forwards;
+      }
       @keyframes momo-tap-card {
-        0%, 18%, 100% { transform:translate(0,0) scaleX(-1) rotate(0deg); }
-        43%, 62% { transform:translate(-36%,20%) scaleX(-1) rotate(8deg); }
-        86% { transform:translate(0,0) scaleX(-1) rotate(0deg); }
+        from { transform:scaleX(-1); }
+        to { transform:translate(-36%,20%) scaleX(-1) rotate(8deg); }
+      }
+      @keyframes momo-tap-confirm {
+        0% { transform:translate(-36%,20%) scaleX(-1) rotate(8deg); }
+        30% { transform:translate(-28%,18%) scale(-1.07,.94); }
+        60% { transform:translate(-12%,-5%) scale(-.98,1.06); }
+        100% { transform:scaleX(-1); }
+      }
+      .route-step-four-success {
+        position:absolute; z-index:4; left:55%; top:70%; width:4.8%; aspect-ratio:1;
+        display:grid; place-items:center; border:2px solid #fff; border-radius:50%;
+        background:#16ad69; color:#fff; font-size:clamp(12px,2.2cqw,22px);
+        font-weight:900; line-height:1; opacity:0; pointer-events:none;
+      }
+      .route-step-four.active .route-step-four-success {
+        animation: card-tap-success .62s .76s ease-out both;
+      }
+      @keyframes card-tap-success {
+        0% { opacity:0; transform:scale(.45); box-shadow:0 0 0 0 #22d98baa; }
+        45% { opacity:1; transform:scale(1.12); box-shadow:0 0 0 12px #22d98b44; }
+        100% { opacity:1; transform:scale(1); box-shadow:0 0 0 24px #22d98b00; }
       }
       .route-instruction-four { position:absolute; z-index:3; left:62%; top:9%; width:31%; aspect-ratio:256 / 71; margin:0; padding:4px 2.5%; display:grid; place-items:center; border:5px solid var(--blue); border-radius:25px; background:var(--yellow); color:#030303; text-align:center; font-size:clamp(16px,2.6vw,22px); line-height:1.25; }
       .route-instruction-four span { white-space:nowrap; }
@@ -315,20 +337,24 @@
       .route-instruction-thirteen { position:absolute; z-index:3; left:40.5%; top:17%; width:37%; aspect-ratio:256 / 71; margin:0; padding:4px 1.5%; display:flex; justify-content:center; align-items:center; border:5px solid var(--blue); border-radius:25px; background:var(--yellow); color:#030303; text-align:center; font-size:clamp(16px,2.6vw,22px); line-height:1.2; white-space:nowrap; }
       .route-instruction-thirteen strong { font-weight:800; }
       .route-step-fourteen-photo { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; object-position:center 50%; }
-      .route-step-fourteen-momo { position:absolute; z-index:2; left:49.5%; top:44%; width:24.5%; height:44%; object-fit:contain; animation:momo-bus-stop-nudge 1.8s ease-in-out infinite; }
-      @keyframes momo-bus-stop-nudge {
-        0%, 30%, 100% { transform:translateX(0); }
-        15% { transform:translateX(-4%); }
+      .route-step-fourteen-momo { position:absolute; z-index:2; left:49.5%; top:44%; width:24.5%; height:44%; }
+      .route-step-fourteen-momo img {
+        position:absolute; left:13%; top:9%; width:80%; height:80%; object-fit:contain;
+        animation:momo-bus-stop-jump 1.8s ease-in-out infinite;
+      }
+      @keyframes momo-bus-stop-jump {
+        0%, 45%, 100% { transform:translateY(0); }
+        22% { transform:translateY(-14%); }
       }
       .route-instruction-fourteen { position:absolute; z-index:3; left:27%; top:16%; width:38%; aspect-ratio:256 / 71; margin:0; padding:4px 1.5%; display:flex; justify-content:center; align-items:center; border:5px solid var(--blue); border-radius:25px; background:var(--yellow); color:#030303; text-align:center; font-size:clamp(16px,2.6vw,22px); line-height:1.2; white-space:nowrap; }
       .route-instruction-fourteen strong { font-weight:800; }
-      .route-step-fifteen-photo { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; object-position:center 50%; transform:translateX(9%) scale(1.1); transform-origin:center center; }
-      .route-step-fifteen-momo { position:absolute; z-index:2; left:18%; top:45%; width:24%; height:37%; object-fit:contain; animation:momo-bibik-violet-nudge 2.4s ease-in-out infinite; }
+      .route-step-fifteen-photo { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; object-position:center 50%; transform:translateX(-3%) scale(1.1); transform-origin:center center; }
+      .route-step-fifteen-momo { position:absolute; z-index:2; left:74%; top:45%; width:24%; height:37%; object-fit:contain; animation:momo-bibik-violet-nudge 2.4s ease-in-out infinite; }
       @keyframes momo-bibik-violet-nudge {
-        0%, 10%, 20%, 100% { transform:translateX(0); }
-        5%, 15% { transform:translateX(4%); }
+        0%, 10%, 20%, 100% { transform:scaleX(-1); }
+        5%, 15% { transform:translateX(-4%) scaleX(-1); }
       }
-      .route-instruction-fifteen { position:absolute; z-index:3; left:5.5%; top:28.5%; width:37%; aspect-ratio:256 / 71; margin:0; padding:4px 1.5%; display:grid; grid-template-rows:repeat(2,auto); align-content:center; justify-items:center; border:5px solid var(--blue); border-radius:25px; background:var(--yellow); color:#030303; text-align:center; font-size:clamp(16px,2.6vw,22px); line-height:1.2; }
+      .route-instruction-fifteen { position:absolute; z-index:3; left:60%; top:23.5%; width:37%; aspect-ratio:256 / 71; margin:0; padding:4px 1.5%; display:grid; grid-template-rows:repeat(2,auto); align-content:center; justify-items:center; border:5px solid var(--blue); border-radius:25px; background:var(--yellow); color:#030303; text-align:center; font-size:clamp(16px,2.6vw,22px); line-height:1.2; }
       .route-instruction-fifteen span { display:block; white-space:nowrap; }
       .route-instruction-fifteen strong { font-weight:800; }
       .route-step-sixteen-photo { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; object-position:center 50%; }
@@ -546,6 +572,7 @@
         <img class="route-step-four-photo" src="assets/route-card-page-5.jpg" alt="A child taps a transit card on the reader at the station gate." />
         <div class="route-step-four-card-cover" aria-hidden="true"></div>
         <img class="route-step-four-momo" src="assets/momo-route-step-2.png" alt="Momo moves down to tap the card, then returns to his starting position." />
+        <span class="route-step-four-success" aria-hidden="true">✓</span>
         <p class="route-instruction-four"><span><strong>Tap</strong> card to <strong>exit</strong></span></p>
       </section>
       <section class="slide route-step-five" aria-label="Step 5: Walk towards Dao Dao shop">
@@ -567,7 +594,7 @@
       </section>
       <section class="slide route-step-nine" aria-label="Step 8: Walk straight to the McCANN building">
         <img class="route-step-nine-photo" src="assets/route-page-9-photo.jpg" alt="A person and child walk along the covered walkway toward the McCANN building." />
-        <img class="route-step-nine-momo" src="assets/momo-route-step-10.png" alt="Momo points along the walkway." />
+        <img class="route-step-nine-momo" src="assets/momo-route-step-13.svg" alt="Momo walks away along the walkway toward the McCANN building." />
         <p class="route-instruction-nine"><span><strong>Walk straight</strong>, you will</span><span>see <strong>McCANN</strong> building</span></p>
       </section>
       <section class="slide route-step-ten" aria-label="Step 9: Walk to the traffic light towards the McCaNN building">
@@ -591,7 +618,9 @@
       </section>
       <section class="slide route-step-fourteen" aria-label="Step 14: You will pass by a bus stop">
         <img class="route-step-fourteen-photo" src="assets/route-page-15-photo.jpg" alt="A covered sidewalk with a bus stop beside the road as a family walks along it." />
-        <img class="route-step-fourteen-momo" src="assets/momo-route-step-14.png" alt="Momo points toward the bus stop." />
+        <div class="route-step-fourteen-momo">
+          <img src="assets/momo-route-step-10.png" alt="Momo waves and jumps beside the bus stop." />
+        </div>
         <p class="route-instruction-fourteen">You will&nbsp;<strong>pass by</strong>&nbsp;a&nbsp;<strong>bus stop</strong></p>
       </section>
       <section class="slide route-step-fifteen" aria-label="Step 15: Continue walking straight until you see Bibik Violet">
