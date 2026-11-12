@@ -83,19 +83,20 @@
       justify-content: center;
       padding: 5cqw;
       color: #111;
+      font-family: "Trebuchet MS", ui-sans-serif, system-ui, sans-serif;
     }
-    .garden-intro-copy h1 { margin: 0; font-size: clamp(18px, 4cqw, 46px); line-height: 1.15; }
+    .garden-intro-copy h1 { margin: 0; font-size: clamp(19px, 3.1cqw, 46px); line-height: 1.15; }
     #gardenIntroTitle:focus { outline: none; }
-    .garden-intro-copy p { margin: 1.5cqw 0; font-size: clamp(12px, 2.2cqw, 23px); color: #475467; }
-    .garden-intro-copy .garden-intro-label { color: #062679; font-weight: 700; text-transform: uppercase; }
+    .garden-intro-copy p { margin: clamp(5px, .81cqw, 12px) 0 0; font-size: clamp(12px, 1.55cqw, 23px); line-height: 1.35; color: #475467; }
+    .garden-intro-copy .garden-intro-label { color: #062679; font-weight: 800; letter-spacing: .04em; text-transform: uppercase; }
     .garden-intro-start {
       align-self: flex-start;
       margin-top: 1cqw;
       width: min(100%, 24cqw);
       min-width: min(100%, 112px);
       padding: .9em .75em;
-      font-size: clamp(12px, 1.55cqw, 20px);
-      font-weight: 700;
+      font-size: clamp(12px, 1.42cqw, 21px);
+      font-weight: 800;
       cursor: pointer;
     }
 
@@ -230,106 +231,61 @@
       animation: load-route 2.2s cubic-bezier(.2, .75, .25, 1) both;
     }
 
-    .completion-screen {
-      background:
-        radial-gradient(circle at 16% 15%, #00c9ff24 0 8%, transparent 8.5%),
-        radial-gradient(circle at 82% 80%, #ffd50032 0 11%, transparent 11.5%),
-        linear-gradient(120deg, #f5ffff 0%, #e8fbff 55%, #fff9de 100%);
+    .completion-screen { background: #fff; }
+    .celebration-confetti { position:absolute; z-index:1; inset:0; overflow:hidden; pointer-events:none; }
+    .confetti-piece { position:absolute; top:-8%; left:var(--x); width:var(--size); height:calc(var(--size) * 1.55); border-radius:2px; background:var(--color); opacity:0; animation:confetti-fall var(--duration) linear var(--delay) infinite; }
+    @keyframes confetti-fall {
+      0% { transform:translate3d(0,-4cqh,0) rotate(0); opacity:0; }
+      10% { opacity:.92; }
+      88% { opacity:.86; }
+      100% { transform:translate3d(var(--drift),112cqh,0) rotate(var(--turn)); opacity:0; }
     }
-
-    .completion-screen::before,
-    .completion-screen::after {
-      content: "✦";
-      position: absolute;
-      color: #00bada;
-      font-size: 7cqw;
-      line-height: 1;
-      pointer-events: none;
-    }
-
-    .completion-screen::before { left: 7%; top: 17%; }
-    .completion-screen::after { right: 8%; bottom: 14%; color: #f2bd22; font-size: 5cqw; }
 
     .completion-layout {
       position: absolute;
+      z-index: 2;
       inset: 0;
       display: flex;
+      flex-direction: column;
       align-items: center;
       justify-content: center;
-      gap: 4%;
-      padding: 6% 9%;
-    }
-
-    .completion-character {
-      position: relative;
-      width: 30%;
-      height: 82%;
-      flex: 0 0 auto;
-      display: flex;
-      align-items: flex-end;
-      justify-content: center;
-    }
-
-    .completion-character::after {
-      content: "";
-      position: absolute;
-      left: 25%;
-      bottom: 2%;
-      width: 50%;
-      height: 5%;
-      border-radius: 50%;
-      background: #163f3930;
-      filter: blur(3px);
-    }
-
-    .completion-momo {
-      position: relative;
-      z-index: 1;
-      width: 100%;
-      height: 100%;
-      object-fit: contain;
-      object-position: center bottom;
-      animation: finish-bounce 1.35s ease-in-out infinite;
-      filter: drop-shadow(0 3px 2px #0626791f);
-    }
-
-    .completion-copy {
-      position: relative;
-      z-index: 1;
-      width: 56%;
-      color: #030303;
-    }
-
-    .completion-kicker {
-      margin: 0 0 2.5%;
-      color: #062679;
-      font-size: 1.6cqw;
-      font-weight: 800;
-      letter-spacing: .14em;
-      text-transform: uppercase;
+      gap: 2cqh;
+      padding: 4cqh 8cqw;
+      text-align: center;
+      font-family: "Trebuchet MS", ui-sans-serif, system-ui, sans-serif;
     }
 
     .completion-title {
       margin: 0;
-      font-size: clamp(22px, 5.1cqw, 52px);
+      color: #062679;
+      font-size: clamp(16px, 4.05cqw, 60px);
       font-weight: 800;
-      line-height: 1.04;
-      letter-spacing: -.035em;
+      line-height: 1.08;
+      letter-spacing: -.025em;
     }
 
-    .completion-title span { color: #0055a7; }
-
     .completion-message {
-      margin: 3% 0 6%;
-      color: #28404a;
-      font-size: clamp(12px, 2.1cqw, 19px);
-      font-weight: 600;
+      margin: 0;
+      color: #263f7b;
+      font-size: clamp(11px, 2.43cqw, 36px);
+      font-weight: 700;
+      line-height: 1.15;
+    }
+
+    .completion-momo {
+      display: block;
+      width: min(35cqw, 43cqh);
+      height: 37cqh;
+      max-height: 300px;
+      object-fit: contain;
+      transform-origin: 50% 88%;
+      animation: finish-bounce 1.35s ease-in-out infinite;
     }
 
     .completion-home {
       min-height: 3.8cqw;
       padding: .9cqw 2.1cqw;
-      border: .25cqw solid #00c9ff;
+      border: max(2px, .43cqw) solid #00bfff;
       border-radius: 1.2cqw;
       background: linear-gradient(120deg, #00ffc9, #00e5ed);
       color: #030303;
@@ -650,7 +606,7 @@
 
     .frame[data-route="garden"] .story :is(.home, .back, .next),
     .garden-intro :is(.home, .garden-intro-start) {
-      border: 1px solid #00c5dc;
+      border: max(2px, .43cqw) solid #00bfff;
       border-radius: clamp(7px, .95cqw, 12px);
       background: #00e6b8;
       color: #091b2d;
@@ -658,7 +614,6 @@
     }
 
     .garden-intro .garden-intro-start {
-      border: max(2px, .43cqw) solid #00bfff;
       border-radius: clamp(10px, 1.25cqw, 18px);
     }
 
@@ -842,6 +797,9 @@
     }
 
     @media (prefers-reduced-motion: reduce) {
+      .completion-screen .confetti-piece,
+      .completion-momo { animation: none !important; }
+
       *,
       *::before,
       *::after {
@@ -891,7 +849,7 @@
         <div class="garden-intro-copy">
           <p class="garden-intro-label">Garden Route</p>
           <h1 id="gardenIntroTitle" tabindex="-1">Lesser people, calmer route.</h1>
-          <p>Let’s take a walk through the garden</p>
+          <p>Let’s take a walk through the garden. Follow the pictures to the exhibition venue.</p>
           <button class="garden-intro-start" id="gardenStart" type="button">Let’s Start! <span aria-hidden="true">→</span></button>
         </div>
       </div>
@@ -899,16 +857,29 @@
     </section>
 
     <section class="entry completion-screen" aria-label="Route complete">
+      <div class="celebration-confetti" aria-hidden="true">
+        <i class="confetti-piece" style="--x:4%;--size:8px;--color:#ffd500;--duration:5.2s;--delay:-2.7s;--drift:32px;--turn:460deg"></i>
+        <i class="confetti-piece" style="--x:10%;--size:6px;--color:#00c9ff;--duration:4.6s;--delay:-1.2s;--drift:-24px;--turn:330deg"></i>
+        <i class="confetti-piece" style="--x:16%;--size:10px;--color:#f36fbd;--duration:5.8s;--delay:-4.1s;--drift:26px;--turn:520deg"></i>
+        <i class="confetti-piece" style="--x:22%;--size:7px;--color:#26bd8c;--duration:4.9s;--delay:-3.3s;--drift:-30px;--turn:400deg"></i>
+        <i class="confetti-piece" style="--x:28%;--size:9px;--color:#ffd500;--duration:5.5s;--delay:-.8s;--drift:21px;--turn:360deg"></i>
+        <i class="confetti-piece" style="--x:34%;--size:6px;--color:#8f69d4;--duration:4.4s;--delay:-2.2s;--drift:-25px;--turn:490deg"></i>
+        <i class="confetti-piece" style="--x:40%;--size:8px;--color:#00c9ff;--duration:5.7s;--delay:-3.8s;--drift:34px;--turn:420deg"></i>
+        <i class="confetti-piece" style="--x:46%;--size:10px;--color:#f36fbd;--duration:4.8s;--delay:-1.6s;--drift:-22px;--turn:540deg"></i>
+        <i class="confetti-piece" style="--x:52%;--size:7px;--color:#ffd500;--duration:5.1s;--delay:-4.6s;--drift:28px;--turn:380deg"></i>
+        <i class="confetti-piece" style="--x:58%;--size:9px;--color:#26bd8c;--duration:4.5s;--delay:-2.9s;--drift:-34px;--turn:470deg"></i>
+        <i class="confetti-piece" style="--x:64%;--size:6px;--color:#8f69d4;--duration:5.9s;--delay:-.5s;--drift:24px;--turn:350deg"></i>
+        <i class="confetti-piece" style="--x:70%;--size:8px;--color:#00c9ff;--duration:4.7s;--delay:-3.6s;--drift:-26px;--turn:520deg"></i>
+        <i class="confetti-piece" style="--x:76%;--size:10px;--color:#f36fbd;--duration:5.4s;--delay:-2.4s;--drift:31px;--turn:410deg"></i>
+        <i class="confetti-piece" style="--x:82%;--size:7px;--color:#ffd500;--duration:4.3s;--delay:-4.4s;--drift:-20px;--turn:500deg"></i>
+        <i class="confetti-piece" style="--x:88%;--size:9px;--color:#26bd8c;--duration:5.6s;--delay:-1.9s;--drift:35px;--turn:390deg"></i>
+        <i class="confetti-piece" style="--x:95%;--size:6px;--color:#8f69d4;--duration:4.8s;--delay:-3.1s;--drift:-29px;--turn:450deg"></i>
+      </div>
       <div class="completion-layout">
-        <div class="completion-character" aria-hidden="true">
-          <img class="completion-momo" src="assets/momo-page25-figma.png" alt="">
-        </div>
-        <div class="completion-copy">
-          <p class="completion-kicker">Route complete</p>
-          <h1 class="completion-title">Congratulations,<br><span>you did it!</span></h1>
-          <p class="completion-message" id="completionMessage">You made it all the way.</p>
-          <button class="completion-home" id="completionHome" type="button">Back to Home</button>
-        </div>
+        <h1 class="completion-title">Congratulations, you did it!</h1>
+        <p class="completion-message" id="completionMessage">You made it all the way.</p>
+        <img class="completion-momo" src="assets/momo-page25-figma.png" alt="Momo smiling with eyes closed and holding a flower">
+        <button class="completion-home" id="completionHome" type="button">Back to Home</button>
       </div>
     </section>
 
