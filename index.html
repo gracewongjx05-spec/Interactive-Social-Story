@@ -55,7 +55,10 @@
         88% { opacity:.86; }
         100% { transform:translate3d(var(--drift),112vh,0) rotate(var(--turn)); opacity:0; }
       }
-      .celebration-content { position:absolute; z-index:2; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; padding:4% 8% 10%; text-align:center; pointer-events:none; }
+      .celebration-content { position:absolute; z-index:2; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; padding:4% 8%; text-align:center; }
+      .celebration .celebration-home { flex:none; margin-top:3cqh; min-height:0; padding:clamp(6px,1.1cqw,14px) clamp(12px,2cqw,30px); font-size:clamp(12px,1.4cqw,22px); }
+      .celebration .celebration-home:focus-visible { outline-color:var(--navy); }
+      .route-ui[data-complete] > :is(.controls,.home-control,.progress,.counter) { display:none; }
       .celebration h1 { max-width:22ch; margin:0; color:var(--navy); font-size:clamp(30px,6.2vh,60px); line-height:1.08; font-weight:800; letter-spacing:-.025em; }
       .celebration p { margin:12px 0 0; color:#263f7b; font-size:clamp(21px,4.1vh,36px); line-height:1.15; font-weight:700; }
       .celebration-momo { position:relative; top:2.5%; display:block; width:min(35vw,43vh); height:40%; max-height:300px; margin-top:1.5%; object-fit:contain; transform-origin:50% 88%; animation:celebration-hop 1.65s ease-in-out infinite; }
@@ -686,6 +689,7 @@
           <h1>Good Job! You have reached!</h1>
           <p>Enjoy the exhibition!</p>
           <img class="celebration-momo" src="assets/momo-route-step-16.png" alt="Happy Momo celebrating with closed, smiling eyes" />
+          <button class="control celebration-home" id="celebrationHome" type="button">Back to Home</button>
         </div>
       </section>
       <nav class="controls" aria-label="Story controls">
@@ -708,6 +712,7 @@
         const next = document.getElementById("next");
         const startRouteButton = document.getElementById("startRouteButton");
         const home = document.getElementById("home");
+        const celebrationHome = document.getElementById("celebrationHome");
         const brandScreen = document.getElementById("brandScreen");
         const pickerScreen = document.getElementById("pickerScreen");
         const routeUi = document.getElementById("routeUi");
@@ -805,6 +810,8 @@
         }, 100);
         function show(index) {
           current = Math.max(0, Math.min(slides.length - 1, index));
+          const complete = current === slides.length - 1;
+          routeUi.toggleAttribute("data-complete", complete);
           slides.forEach((slide, i) => {
             const active = i === current;
             slide.classList.toggle("active", active);
@@ -830,10 +837,11 @@
           segments.forEach((segment, i) => segment.classList.toggle("done", i <= current));
           counter.textContent = `Page ${current + 1} of ${slides.length}`;
           back.disabled = current === 0;
-          next.hidden = current === 0;
-          next.querySelector("span").textContent = current === slides.length - 1 ? "Start again" : "Next";
-          next.setAttribute("aria-label", current === slides.length - 1 ? "Start again from New Everyday Life, By Design" : current === 0 ? "Start the route" : "Next page");
+          next.hidden = current === 0 || complete;
+          next.querySelector("span").textContent = "Next";
+          next.setAttribute("aria-label", "Next page");
           announcement.textContent = slides[current].getAttribute("aria-label");
+          if (complete) celebrationHome.focus({ preventScroll:true });
         }
         function renderGardenPage() {
           window.clearTimeout(gardenTapTimer);
@@ -961,32 +969,23 @@
           showRoutePicker();
         }
         back.addEventListener("click", () => show(current - 1));
-        next.addEventListener("click", () => {
-          if (current === slides.length - 1) {
-            routeUi.hidden = true;
-            pickerScreen.hidden = true;
-            brandingLeaving = false;
-            brandScreen.classList.remove("leaving");
-            brandScreen.hidden = false;
-            brandScreen.focus({ preventScroll:true });
-            return;
-          }
-          show(current + 1);
-        });
+        next.addEventListener("click", () => show(current + 1));
         startRouteButton.addEventListener("click", () => show(1));
-        home.addEventListener("click", () => {
+        function leaveShortestRoute() {
           routeUi.hidden = true;
           showRoutePicker();
-        });
+        }
+        home.addEventListener("click", leaveShortestRoute);
+        celebrationHome.addEventListener("click", leaveShortestRoute);
         document.addEventListener("keydown", event => {
-          if (routeUi.hidden) return;
+          if (routeUi.hidden || routeUi.hasAttribute("data-complete")) return;
           if (event.key === "ArrowLeft") show(current - 1);
           if (event.key === "ArrowRight" || event.key === " ") { event.preventDefault(); show(current + 1); }
         });
         let startX = 0;
         document.querySelector(".book").addEventListener("touchstart", event => { startX = event.changedTouches[0].clientX; }, { passive:true });
         document.querySelector(".book").addEventListener("touchend", event => {
-          if (routeUi.hidden) return;
+          if (routeUi.hidden || routeUi.hasAttribute("data-complete")) return;
           const dx = event.changedTouches[0].clientX - startX;
           if (Math.abs(dx) > 65) show(current + (dx < 0 ? 1 : -1));
         }, { passive:true });
