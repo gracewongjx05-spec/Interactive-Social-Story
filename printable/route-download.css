@@ -1,0 +1,19 @@
+/* Shared by the Shortest and Garden route intro screens. */
+.printable-route {
+  display: inline-flex;
+  align-items: center;
+  align-self: flex-start;
+  gap: .55em;
+  margin-top: clamp(8px, 1.7cqw, 24px);
+  color: #062679;
+  font-size: clamp(12px, 1.35cqw, 20px);
+  font-weight: 700;
+  line-height: 1.25;
+  text-underline-offset: .16em;
+}
+
+.printable-route svg {
+  width: 1em;
+  height: 1em;
+  flex: none;
+}
